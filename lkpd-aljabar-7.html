@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LKPD Aljabar Kelas 7 | Ruang Matematika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ec;--grid:rgba(31,111,92,.08);--card:#fff;--ink:#17261f;--mute:#5d6b64;--line:#dcd8c9;--hero:#0f3d33;--chalk:#f4f1e6;--accent:#f2b134;--main:#1f6f5c;--soft:#e9f2ee;--paper:#fffaf0;--coral:#d9573b;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1714;--grid:rgba(79,191,159,.07);--card:#18231f;--ink:#e8efe9;--mute:#9cb0a7;--line:#2b3a34;--hero:#0a2a23;--main:#4fbf9f;--soft:#1f302a;--paper:#1d2a24;--coral:#ff8a6b}}
+:root[data-theme="dark"]{--bg:#0f1714;--grid:rgba(79,191,159,.07);--card:#18231f;--ink:#e8efe9;--mute:#9cb0a7;--line:#2b3a34;--hero:#0a2a23;--main:#4fbf9f;--soft:#1f302a;--paper:#1d2a24;--coral:#ff8a6b}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:"DM Sans",system-ui,"Segoe UI",Arial,sans-serif;line-height:1.6;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.wrap{max-width:800px;margin:0 auto;padding:0 18px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;line-height:1.2}
+header{background:var(--hero);color:var(--chalk);border-radius:0 0 28px 28px;padding:18px 0 30px}
+header a{color:var(--accent);text-decoration:none;font-weight:700;font-size:.92rem;margin-right:14px}
+header h1{font-size:clamp(1.7rem,5vw,2.4rem);margin:16px 0 6px}header p{margin:0;color:rgba(244,241,230,.85)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 14px}
+.tab{font:inherit;font-weight:700;font-size:.9rem;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.tab:focus-visible,.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px}
+.lbl{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);margin-bottom:4px}
+.baca{background:var(--paper);border-left:6px solid var(--accent)}.baca p{margin:0 0 8px}.baca p:last-child{margin:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.row{grid-template-columns:1fr}}
+label.f{display:block;font-weight:700;font-size:.88rem;margin:0 0 3px}
+input[type=text],textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:84px;resize:vertical}
+.tg{margin-bottom:14px}.tg:last-child{margin-bottom:0}.tg p{margin:0 0 6px;font-weight:700}
+.btn{font:inherit;font-weight:700;background:var(--main);color:#fff;border:0;border-radius:10px;padding:10px 18px;cursor:pointer}
+.btn.alt{background:transparent;color:var(--main);border:1.5px solid var(--main)}
+.aks{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 6px}.note{font-size:.86rem;color:var(--mute);margin:0 0 50px}
+@media print{body{background:#fff;color:#000}header,.tabs,.aks,.note{display:none}.sec{break-inside:avoid;border-color:#999}textarea,input{border:1px solid #999;background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a href="index.html">&larr; Beranda</a><a href="materi-aljabar-7.html">Materi Aljabar</a>
+  <h1>LKPD Aljabar</h1>
+  <p>Kelas 7 &middot; dikerjakan <b>berkelompok</b>. Diskusikan, tulis jawaban bersama, lalu salin atau cetak hasilnya untuk dikumpulkan.</p>
+</div></header>
+<main class="wrap">
+  <div class="tabs" id="tabs" role="tablist" aria-label="LKPD"></div>
+  <div id="isi"></div>
+  <div class="aks"><button class="btn" id="salin" type="button">Salin hasil kelompok</button><button class="btn alt" id="cetak" type="button">Cetak / simpan PDF</button></div>
+  <p class="note" id="status">Jawaban tersimpan otomatis di perangkat ini selama kelompok mengerjakan. Pakai satu perangkat per kelompok.</p>
+</main>
+
+<script>
+var K = [
+{ judul:"LKPD 1: Unsur dan Sifat Aljabar", setelah:"Dikerjakan setelah Pertemuan 2",
+  tujuan:"Menuliskan situasi sebagai bentuk aljabar, menyebutkan unsurnya, dan menjelaskan sifat operasi yang dipakai.",
+  bacaTitle:"Toko Kue Donat",
+  baca:["Sebuah toko menjual donat seharga <b>d</b> rupiah per buah dan kotak kemasan seharga Rp2.000 per kotak. Pak Rudi membeli 6 donat dan 1 kotak.","Bu Yani membeli 4 donat dan 1 kotak, lalu menambah 2 donat lagi tanpa kotak. Seorang pelanggan lain membeli 3 paket, tiap paket berisi 2 donat dan 1 kotak."],
+  tugas:["Tulis bentuk aljabar total belanja Pak Rudi. Sebutkan variabel, koefisien, dan konstantanya.","Tulis belanja Bu Yani dalam dua tahap, lalu sederhanakan. Apakah totalnya sama dengan Pak Rudi? Jelaskan alasannya dengan kalimat lengkap.","Seorang siswa berkata, '6d + 2.000 dan 2.000 + 6d hasilnya berbeda karena urutannya berbeda.' Setujukah kelompokmu? Sebutkan sifat yang berlaku dan buktikan dengan d = 3.000.","Tulis total belanja pelanggan yang membeli 3 paket dalam bentuk 3(2d + 2.000), lalu jabarkan. Sifat apa yang dipakai?","Tuliskan satu kesimpulan kelompok: mengapa memakai variabel membantu kita saat harga belum pasti?"] },
+{ judul:"LKPD 2: Operasi Aljabar dalam Perencanaan Acara", setelah:"Dikerjakan setelah Pertemuan 4",
+  tujuan:"Menjumlahkan, mengurangkan, mengalikan, dan membagi bentuk aljabar dalam konteks anggaran konsumsi.",
+  bacaTitle:"Konsumsi Pentas Kelas",
+  baca:["Panitia pentas kelas menyiapkan konsumsi. Satu paket berisi 1 roti seharga <b>r</b> rupiah dan 1 minuman seharga Rp3.000.","Hari pertama dipesan 8 paket. Hari kedua dipesan 5 paket, lalu panitia mengembalikan 2 minuman (tanpa roti) sehingga biaya berkurang Rp3.000 untuk tiap minuman yang dikembalikan."],
+  tugas:["Tulis biaya hari pertama sebagai 8(r + 3.000), lalu jabarkan.","Tulis biaya hari kedua setelah pengembalian, lalu sederhanakan.","Jumlahkan biaya dua hari dan sederhanakan hasilnya.","Biaya hari pertama dibagi rata kepada 4 kelas. Berapa bentuk aljabar iuran tiap kelas?","Jika r = 5.000, hitung total biaya dua hari dan iuran tiap kelas pada hari pertama. Tulis laporan singkat untuk bendahara dalam 2-3 kalimat."] },
+{ judul:"LKPD 3: Proyek Mini Memilih Layanan", setelah:"Dikerjakan pada Pertemuan 6",
+  tujuan:"Memodelkan masalah nyata dengan bentuk aljabar, membandingkan pilihan, dan mengambil keputusan dengan alasan tertulis.",
+  bacaTitle:"Dua Penyewaan Sepeda",
+  baca:["Di tempat wisata ada dua penyewaan sepeda. <b>Sewa A</b> memungut biaya awal Rp10.000 ditambah Rp4.000 untuk setiap jam. <b>Sewa B</b> tidak ada biaya awal, tetapi Rp6.000 untuk setiap jam.","Dua keluarga ingin menyewa sepeda. Keluarga Dani akan menyewa 3 jam, sedangkan keluarga Eka 8 jam. Mereka meminta saran dari kelompokmu."],
+  tugas:["Tulis bentuk aljabar biaya Sewa A dan Sewa B untuk j jam.","Hitung biaya A dan B untuk 1, 2, 3, 4, dan 5 jam. Tuliskan hasilnya dalam bentuk daftar atau tabel sederhana.","Pada berapa jam biaya kedua sewa sama? Apa artinya bagi pelanggan yang menyewa lebih lama dari itu?","Tulis saran untuk keluarga Dani (3 jam) dan keluarga Eka (8 jam) lengkap dengan hitungan dan alasan dalam kalimat.","Buat satu masalah serupa (ada biaya tetap dan biaya per satuan) dari kehidupan sekitarmu, lalu tukarkan dengan kelompok lain untuk diselesaikan."] }
+];
+var $=function(i){return document.getElementById(i)}, cur=0, ST="lkpd-aljabar7:";
+function ld(k){try{return localStorage.getItem(ST+k)||""}catch(e){return ""}}
+function sv(k,v){try{localStorage.setItem(ST+k,v)}catch(e){}}
+function tabs(){ $("tabs").innerHTML=K.map(function(k,i){return '<button class="tab" role="tab" aria-selected="'+(i===cur)+'" onclick="buka('+i+')">LKPD '+(i+1)+'</button>'}).join(""); }
+function buka(i){
+  cur=i; var k=K[i]; tabs();
+  var h='<div class="sec"><div class="lbl">'+k.setelah+'</div><h2>'+k.judul+'</h2><p style="margin:8px 0 0;color:var(--mute)"><b>Tujuan:</b> '+k.tujuan+'</p></div>';
+  h+='<div class="sec"><div class="lbl">Identitas kelompok</div><div class="row"><div><label class="f" for="kel">Nama kelompok</label><input type="text" id="kel" data-k="kel"></div><div><label class="f" for="kls">Kelas</label><input type="text" id="kls" data-k="kls"></div></div><label class="f" for="ang" style="margin-top:10px">Anggota (satu nama per baris)</label><textarea id="ang" data-k="ang"></textarea><p style="margin:8px 0 0;font-size:.86rem;color:var(--mute)">Bagi peran: pembaca teks, penulis jawaban, pengecek hitungan, dan juru bicara. Bergantian di setiap nomor.</p></div>';
+  h+='<div class="sec baca"><div class="lbl">Baca dulu &middot; '+k.bacaTitle+'</div>'+k.baca.map(function(t){return '<p>'+t+'</p>'}).join("")+'</div>';
+  h+='<div class="sec"><div class="lbl">Kegiatan kelompok</div>'+k.tugas.map(function(t,n){return '<div class="tg"><p>'+(n+1)+'. '+t+'</p><textarea data-k="'+i+'-'+n+'" aria-label="Jawaban nomor '+(n+1)+'"></textarea></div>'}).join("")+'</div>';
+  $("isi").innerHTML=h;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-k]"),function(e){ e.value=ld(e.dataset.k); e.oninput=function(){sv(e.dataset.k,e.value)}; });
+  history.replaceState(null,"","#l"+(i+1)); window.scrollTo({top:0});
+}
+function ringkas(){
+  var k=K[cur],g=function(x){return ($(x)?$(x).value:"").trim()||"-"};
+  var t=k.judul+"\nKelompok: "+g("kel")+"\nKelas: "+g("kls")+"\nAnggota:\n"+g("ang")+"\n";
+  k.tugas.forEach(function(q,n){ var a=ld(cur+"-"+n).trim()||"-"; t+="\n"+(n+1)+". "+q+"\nJawaban: "+a+"\n"; });
+  return t;
+}
+$("salin").onclick=function(){
+  var t=ringkas(),ok=function(){$("status").textContent="Hasil kelompok tersalin. Tempel di pesan atau dokumen untuk dikumpulkan."};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){$("status").textContent="Gagal menyalin. Gunakan tombol Cetak / simpan PDF."})}
+  else $("status").textContent="Peramban ini tidak mendukung salin otomatis. Gunakan tombol Cetak / simpan PDF.";
+};
+$("cetak").onclick=function(){window.print()};
+var m=/^#l([1-3])$/.exec(location.hash); buka(m?+m[1]-1:0);
+</script>
+</body>
+</html>
