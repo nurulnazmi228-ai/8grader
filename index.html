@@ -30,10 +30,6 @@ h1,h2,h3{font-family:Fraunces,Georgia,"Times New Roman",serif;margin:0;line-heig
 .s1{font-size:7rem;right:6%;top:8%}.s2{font-size:5rem;right:26%;bottom:6%;animation-delay:-3s}.s3{font-size:4rem;right:3%;bottom:14%;animation-delay:-6s}.s4{font-size:3.4rem;left:48%;top:14%;animation-delay:-2s}
 @keyframes float{50%{transform:translateY(-14px) rotate(4deg)}}
 @media (prefers-reduced-motion:reduce){.sym{animation:none}html{scroll-behavior:auto}}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:-34px;position:relative;z-index:2}
-.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 6px 18px rgba(15,61,51,.08)}
-.num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--main);font-weight:800;display:grid;place-items:center}
-.step b{display:block;font-size:.95rem}.step span{font-size:.86rem;color:var(--mute)}
 section.menu{padding:46px 0 30px}
 .menu h2{font-size:1.7rem;margin-bottom:6px}.menu>.wrap>p{margin:0 0 22px;color:var(--mute)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
@@ -52,6 +48,7 @@ section.menu{padding:46px 0 30px}
 .card.soon{border-style:dashed;background:transparent;align-items:center;justify-content:center;text-align:center;min-height:220px;color:var(--mute)}
 .card.soon::before{display:none}.card.soon:hover{transform:none;box-shadow:none}
 .card.soon .plus{font-family:Fraunces,Georgia,serif;font-size:2.6rem;color:var(--line);line-height:1}
+.lbl{font-weight:700;font-size:.78rem;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;margin:0 0 6px}.filter.kls .fbtn{padding:10px 22px;font-size:1rem}
 .filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .fbtn{font:inherit;font-weight:700;font-size:.9rem;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
 .fbtn[aria-selected="true"]{background:var(--main);border-color:var(--main);color:#fff}
@@ -70,50 +67,45 @@ footer{padding:26px 0 40px;text-align:center;color:var(--mute);font-size:.86rem}
   <div class="wrap">
     <div class="brand"><span class="logo" aria-hidden="true">∑</span><span id="namaSitus">Ruang Matematika</span></div>
     <h1>Belajar matematika, <em>selangkah demi selangkah.</em></h1>
-    <p>Tempat materi, LKPD, latihan, tugas, dan remedial Matematika SMP. Pilih yang diminta gurumu, lalu buka langsung dari sini.</p>
-    <a class="cta" href="#kegiatan">Lihat kegiatan</a>
+    <p>Materi, LKPD, latihan, games, dan remedial Matematika untuk kelas 7, 8, dan 9. Semua ada di satu tempat, buka kapan saja dari HP atau laptop.</p>
+    <a class="cta" href="#kegiatan">Mulai belajar</a>
   </div>
 </header>
 
 <main>
-  <div class="wrap">
-    <div class="steps" aria-label="Alur mengerjakan">
-      <div class="step"><span class="num">1</span><div><b>Pilih kegiatan</b><span>Klik bagian yang sudah dibuka guru.</span></div></div>
-      <div class="step"><span class="num">2</span><div><b>Isi identitas</b><span>Nama, kelas, dan tanggal.</span></div></div>
-      <div class="step"><span class="num">3</span><div><b>Kerjakan dengan jujur</b><span>Tetap di halaman ujian sampai selesai.</span></div></div>
-      <div class="step"><span class="num">4</span><div><b>Foto layar nilai</b><span>Tunjukkan ke gurumu.</span></div></div>
-    </div>
-  </div>
-
   <section class="menu" id="kegiatan">
     <div class="wrap">
-      <h2>Pilih kegiatan</h2>
-      <p>Materi, LKPD, dan tugas baru akan muncul di sini saat guru menambahkannya.</p>
-      <div class="filter" id="filter" role="tablist" aria-label="Kategori"></div>
+      <h2>Mau belajar apa hari ini?</h2>
+      <p>Pilih kelasmu, lalu pilih jenis kegiatannya.</p>
+      <div class="lbl">Kelas</div>
+      <div class="filter kls" id="kelas" role="tablist" aria-label="Kelas"></div>
+      <div class="lbl">Jenis</div>
+      <div class="filter" id="filter" role="tablist" aria-label="Jenis kegiatan"></div>
       <div class="grid" id="grid"></div>
     </div>
   </section>
 </main>
 
-<footer><div class="wrap">Ruang Matematika &middot; E-Learning Matematika SMP</div></footer>
+<footer><div class="wrap">Ruang Matematika &middot; E-Learning Matematika Kelas 7, 8, 9</div></footer>
 
 <script>
-/* ============ CARA MENAMBAH KEGIATAN BARU ============
-   1. Unggah file HTML kegiatan ke repositori (contoh: tugas2.html).
-   2. Salin satu blok { ... } di bawah, tempel setelah blok terakhir (beri koma), lalu ubah isinya.
-   3. buka:true  -> tombol aktif.   buka:false -> tombol abu-abu "Belum dibuka".
-      Ubah buka dari false ke true saat hari pengerjaannya tiba.
-   jenis = kategori kartu: "Materi", "LKPD", "Latihan", "Tugas", atau "Remedial" (menentukan tab filter).
-   tint = warna kartu (hex), ikon = satu huruf atau simbol.
-   Untuk materi/LKPD yang hanya satu tombol, cukup isi satu item di tombol.
-   ====================================================== */
+/* ============ CARA MENAMBAH BAHAN BARU ============
+   1. Unggah file HTML-nya ke repositori (contoh: materi-bilangan-bulat.html).
+   2. Salin satu blok { ... } di KEGIATAN, tempel setelah blok terakhir (beri koma), lalu ubah isinya.
+   jenis  = "Materi", "LKPD", "Latihan", "Games", "Tugas", atau "Remedial".
+   kelas  = daftar kelas, contoh [8] atau [7, 8, 9].
+   buka:true -> tombol aktif.  buka:false -> abu-abu "Belum dibuka" (ubah ke true saat harinya tiba).
+   tint = warna kartu (hex), ikon = satu huruf atau simbol, label = chip tambahan (opsional).
+   Alamat langsung ke satu kelas: .../?kelas=8
+   ================================================== */
 var NAMA_SITUS = "Ruang Matematika";
+var JENIS = ["Semua", "Materi", "LKPD", "Latihan", "Games", "Tugas", "Remedial"];
+var KELAS = ["Semua kelas", "Kelas 7", "Kelas 8", "Kelas 9"];
 
 var KEGIATAN = [
   {
-    jenis: "Remedial", ikon: "R", tint: "#1f6f5c",
+    jenis: "Remedial", kelas: [8], ikon: "R", tint: "#1f6f5c",
     judul: "Remedial PSTS Matematika",
-    label: ["Kelas 8", "Remedial"],
     deskripsi: "Perbandingan, skala, relasi dan fungsi. Dua bagian dikerjakan di hari berbeda. Tiap bagian bisa dikerjakan 2 kali.",
     tombol: [
       { teks: "Bagian 1 · Pilihan ganda (30 menit)", href: "remedial.html?bagian=1", buka: true },
@@ -123,14 +115,19 @@ var KEGIATAN = [
 ];
 
 document.getElementById("namaSitus").textContent = NAMA_SITUS;
-var JENIS = ["Semua", "Materi", "LKPD", "Latihan", "Tugas", "Remedial"];
-var grid = document.getElementById("grid"), filter = document.getElementById("filter");
+var grid = document.getElementById("grid"), fJenis = document.getElementById("filter"), fKelas = document.getElementById("kelas");
+var pilih = { jenis: "Semua", kelas: 0 };
+var q = new URLSearchParams(location.search).get("kelas");
+if (q && ["7", "8", "9"].indexOf(q) >= 0) pilih.kelas = +q - 6;
 function el(tag, cls, txt){ var e = document.createElement(tag); if(cls) e.className = cls; if(txt) e.textContent = txt; return e; }
 
+function teksKelas(a){ return a.length === 3 ? "Kelas 7-9" : "Kelas " + a.join(" & "); }
 function kartu(k){
   var c = el("article", "card"); c.style.setProperty("--tint", k.tint);
   c.appendChild(el("div", "ico", k.ikon));
-  var chips = el("div", "chips"); k.label.forEach(function(l){ chips.appendChild(el("span", "chip", l)); }); c.appendChild(chips);
+  var chips = el("div", "chips");
+  [k.jenis, teksKelas(k.kelas)].concat(k.label || []).forEach(function(l){ chips.appendChild(el("span", "chip", l)); });
+  c.appendChild(chips);
   c.appendChild(el("h3", "", k.judul));
   c.appendChild(el("p", "", k.deskripsi));
   var a = el("div", "actions");
@@ -143,29 +140,33 @@ function kartu(k){
   });
   c.appendChild(a); return c;
 }
-
-function tampil(jenis){
+function tampil(){
   grid.innerHTML = "";
-  var hasil = KEGIATAN.filter(function(k){ return jenis === "Semua" || k.jenis === jenis; });
+  var hasil = KEGIATAN.filter(function(k){
+    return (pilih.jenis === "Semua" || k.jenis === pilih.jenis) && (pilih.kelas === 0 || k.kelas.indexOf(pilih.kelas + 6) >= 0);
+  });
   hasil.forEach(function(k){ grid.appendChild(kartu(k)); });
-  if (jenis === "Semua") {
+  if (!hasil.length) {
+    grid.appendChild(el("div", "empty", "Belum ada " + (pilih.jenis === "Semua" ? "kegiatan" : pilih.jenis) + (pilih.kelas ? " untuk " + KELAS[pilih.kelas] : "") + ". Pantau terus ya."));
+  } else if (pilih.jenis === "Semua") {
     var soon = el("article", "card soon");
     soon.appendChild(el("div", "plus", "+"));
     soon.appendChild(el("b", "", "Segera hadir"));
-    soon.appendChild(el("span", "", "Materi, LKPD, dan tugas berikutnya akan ditambahkan di sini."));
+    soon.appendChild(el("span", "", "Materi, LKPD, latihan, dan games berikutnya akan ditambahkan di sini."));
     grid.appendChild(soon);
-  } else if (!hasil.length) {
-    grid.appendChild(el("div", "empty", "Belum ada " + jenis + " yang ditambahkan. Pantau terus ya."));
   }
-  Array.prototype.forEach.call(filter.children, function(b){ b.setAttribute("aria-selected", b.textContent === jenis ? "true" : "false"); });
+  Array.prototype.forEach.call(fJenis.children, function(b){ b.setAttribute("aria-selected", b.textContent === pilih.jenis ? "true" : "false"); });
+  Array.prototype.forEach.call(fKelas.children, function(b, i){ b.setAttribute("aria-selected", i === pilih.kelas ? "true" : "false"); });
 }
-
 JENIS.forEach(function(j){
   var b = el("button", "fbtn", j); b.type = "button"; b.setAttribute("role", "tab");
-  b.onclick = function(){ tampil(j); };
-  filter.appendChild(b);
+  b.onclick = function(){ pilih.jenis = j; tampil(); }; fJenis.appendChild(b);
 });
-tampil("Semua");
+KELAS.forEach(function(kl, i){
+  var b = el("button", "fbtn", kl); b.type = "button"; b.setAttribute("role", "tab");
+  b.onclick = function(){ pilih.kelas = i; tampil(); }; fKelas.appendChild(b);
+});
+tampil();
 </script>
 </body>
 </html>
