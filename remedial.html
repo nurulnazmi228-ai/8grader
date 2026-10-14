@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Remedial PSTS Matematika Kelas 8</title>
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#1b2a25;--mute:#5c6b65;--line:#d5dfda;--main:#1f6f5c;--warn:#b3261e;--warnbg:#fdeceb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121917;--card:#1b2622;--ink:#e6efeb;--mute:#9db0a8;--line:#2e3d37;--main:#4fbf9f;--warn:#ff8a80;--warnbg:#3a1f1d}}
+:root[data-theme="dark"]{--bg:#121917;--card:#1b2622;--ink:#e6efeb;--mute:#9db0a8;--line:#2e3d37;--main:#4fbf9f;--warn:#ff8a80;--warnbg:#3a1f1d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,Arial,sans-serif;line-height:1.5}
+.wrap{max-width:700px;margin:0 auto;padding:20px 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+h1{font-size:1.35rem;margin:0 0 6px}p{margin:0 0 10px;color:var(--mute)}
+ul{margin:0 0 12px;padding-left:20px;color:var(--mute)}
+label.f{display:block;font-weight:600;margin:0 0 4px;font-size:.92rem}
+input[type=text],input[type=date],select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:1rem;margin-bottom:12px}
+button{background:var(--main);color:#fff;border:0;border-radius:8px;padding:11px 18px;font-size:1rem;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--main);outline-offset:2px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:.92rem}
+.badge{padding:2px 10px;border-radius:99px;background:var(--bg);border:1px solid var(--line)}
+.badge.bad{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
+label.opt{display:block;padding:9px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;cursor:pointer}
+label.opt:has(input:checked){border-color:var(--main);background:var(--bg)}
+.q{font-weight:600;margin-bottom:8px}
+.log{font-size:.88rem;color:var(--mute);margin:0;padding-left:18px}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+#overlay .box{background:var(--card);border:3px solid var(--warn);border-radius:14px;padding:24px;max-width:420px;text-align:center}
+#overlay h2{color:var(--warn);margin:0 0 10px}
+table.k{width:100%;border-collapse:collapse;font-size:.92rem;margin-bottom:12px}table.k td,table.k th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}.ok{color:var(--main);font-weight:700}.no{color:var(--warn);font-weight:700}.hide{display:none}.err{color:var(--warn);margin:0 0 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start" class="card">
+  <p><a href="index.html">&larr; Kembali ke beranda</a></p>
+  <h1>Remedial PSTS Matematika Kelas 8</h1>
+  <p>Isi identitas dengan benar, lalu mulai. Ujian berjalan dalam layar penuh.</p>
+  <label class="f" for="nama">Nama lengkap</label>
+  <input type="text" id="nama" autocomplete="off">
+  <label class="f" for="kelas">Kelas</label>
+  <input type="text" id="kelas" placeholder="Contoh: 8A" autocomplete="off">
+  <label class="f" for="tgl">Hari, tanggal</label>
+  <input type="date" id="tgl">
+  <p id="hari" style="margin-top:-6px"></p>
+  <label class="f" for="bagian">Bagian</label>
+  <select id="bagian">
+    <option value="1">Bagian 1: Pilihan ganda (10 soal, 30 menit)</option>
+    <option value="2">Bagian 2: Isian singkat (10 soal, 60 menit)</option>
+  </select>
+  <ul>
+    <li>Pindah tab, pindah aplikasi, atau keluar dari layar penuh dihitung pelanggaran.</li>
+    <li>Pelanggaran ke-3: jawaban otomatis dikumpulkan.</li>
+    <li>Menutup atau memuat ulang halaman tidak mengulang waktu.</li>
+    <li>Tiap bagian bisa dikerjakan maksimal 2 kali. Nilai terbaru menggantikan nilai sebelumnya.</li>
+  </ul>
+  <p class="err" id="err"></p>
+  <button id="mulai">Mulai ujian</button>
+</section>
+
+<section id="ujian" class="hide">
+  <div class="bar">
+    <span id="who"></span>
+    <span class="badge" id="timer"></span>
+    <span class="badge" id="viol">Pelanggaran: 0 / 3</span>
+  </div>
+  <p id="petunjuk"></p>
+  <div id="soal"></div>
+  <div class="card">
+    <b>Catatan pelanggaran</b>
+    <ol class="log" id="log"><li>Belum ada.</li></ol>
+  </div>
+  <button id="kumpul">Kumpulkan jawaban</button>
+</section>
+
+<section id="hasil" class="card hide"></section>
+</div>
+
+<div id="overlay" role="alertdialog" aria-modal="true">
+  <div class="box">
+    <h2>Kamu keluar dari halaman ujian</h2>
+    <p id="oMsg"></p>
+    <button id="lanjut">Kembali ke ujian</button>
+  </div>
+</div>
+
+<script>
+var BAGIAN={
+ 1:{menit:30,jenis:"pg",judul:"Bagian 1: Pilihan ganda",petunjuk:"Pilih satu jawaban yang paling benar.",soal:[
+  {q:"Pak Yahya dan Pak Anton masing-masing membeli sebungkus makanan ikan dengan merek yang sama, tetapi beratnya berbeda. Kemasan yang dibeli Pak Yahya tertulis berat 1.200 gram dan kemasan yang dibeli Pak Anton 1,5 kg. Perbandingan berat pakan ikan yang dibeli Pak Yahya dan Pak Anton adalah ...",o:["4 : 5","3 : 1","3 : 2","2 : 3"],a:0},
+  {q:"Sebuah mobil menghabiskan 8 liter bensin untuk menempuh jarak 56 km. Jika jarak yang ditempuh 84 km, maka bensin yang diperlukan adalah ...",o:["5,5 liter","7,0 liter","10,5 liter","12,0 liter"],a:3},
+  {q:"Diketahui 45 liter beras cukup untuk makan 5 orang dalam 10 hari. Dalam suatu acara kemah, dihabiskan 72 liter beras dalam 5 hari. Dengan anggapan bahwa setiap orang memiliki porsi makan yang sama besar, banyaknya orang yang mengikuti acara kemah tersebut adalah ...",o:["8 orang","16 orang","80 orang","160 orang"],a:1},
+  {q:"Suatu pekerjaan dapat diselesaikan oleh 50 orang dalam 8 bulan. Agar pekerjaan tersebut dapat diselesaikan dalam 5 bulan, diperlukan tambahan pekerja sebanyak ...",o:["30 orang","42 orang","45 orang","80 orang"],a:0},
+  {q:"Proyek perbaikan jalan harus selesai dalam 30 hari dengan pekerja sebanyak 15 orang. Setelah 6 hari pelaksanaan, proyek tersebut dihentikan selama 4 hari karena kendala teknis. Jika kemampuan bekerja setiap orang dianggap sama dan proyek harus selesai tepat waktu, maka tambahan pekerja yang diperlukan adalah ...",o:["1 orang","3 orang","6 orang","9 orang"],a:1},
+  {q:"Diketahui A = {1, 2, 4} dan B = {2, 3, 4}. Relasi dari A ke B dinyatakan dengan himpunan pasangan berurutan {(1,2), (1,3), (1,4), (2,2), (2,4), (4,4)}. Relasi dari himpunan A ke himpunan B tersebut adalah ...",o:["Lebih dari","Kurang dari","Setengah dari","Faktor dari"],a:3},
+  {q:"Diketahui A = {p, q, r} dan B = {1, 2, 3}. Himpunan pasangan berurutan dari A ke B yang merupakan fungsi adalah ...",o:["{(p,3), (q,3), (r,1), (r,3)}","{(p,1), (p,3), (q,1)}","{(r,1), (r,2), (r,3)}","{(p,1), (q,3), (r,3)}"],a:3},
+  {q:"Diketahui A = {a, b, c} dan B = {1, 2, 3, 4, 5}. Banyak fungsi yang mungkin dari himpunan A ke himpunan B adalah ...",o:["15","32","125","243"],a:2},
+  {q:"Diketahui fungsi f(x) = 2x − 3. Jika f(a) = 5 dan f(−2) = b, maka a + b = ...",o:["5","2","−3","−6"],a:2},
+  {q:"Grafik fungsi f(x) = 2x + 2, dengan x = {−2, −1, 0, 1, 2, 3}, melalui titik-titik ...",o:["(1, 2) dan (3, −1)","(−2, −2) dan (1, 4)","(1, −4) dan (4, 2)","(−2, −2) dan (3, 2)"],a:1}
+ ]},
+ 2:{menit:60,jenis:"isian",judul:"Bagian 2: Isian singkat",petunjuk:"Tulis jawabannya saja (angka tanpa satuan). Gunakan koma atau titik untuk desimal.",soal:[
+  {q:"Suatu pekerjaan akan selesai dikerjakan oleh 24 orang dalam 20 hari. Agar pekerjaan tersebut dapat diselesaikan selama 15 hari, banyaknya tambahan pekerja yang diperlukan adalah ... orang.",k:"8"},
+  {q:"Perbandingan panjang dan lebar persegi panjang adalah 8 : 5. Jika kelilingnya 78 m, luasnya adalah ... m².",k:"360"},
+  {q:"Skala denah suatu rumah 1 : 250. Salah satu ruang pada rumah berbentuk persegi panjang berukuran 2 cm × 3 cm pada denah. Luas sebenarnya ruang tersebut adalah ... m².",k:"37.5"},
+  {q:"Sebuah peta mempunyai skala 1 : 2.500.000. Jarak A ke P = 3 cm, P ke B = 6 cm, A ke Q = 3 cm, Q ke B = 4 cm (pada peta). Adi berkendara dari A ke B melalui P, sedangkan Ali melalui Q. Selisih jarak tempuh Ali dan Adi adalah ... km.",k:"50"},
+  {q:"Denah rumah berskala 1 : 150. Pada denah, garasi berukuran 2 cm × 1,5 cm dan kamar tidur utama berukuran 2 cm × 2,5 cm. Selisih luas sebenarnya garasi dan kamar tidur utama adalah ... m².",k:"4.5"},
+  {q:"Perhatikan himpunan pasangan berurutan berikut.\n1) {(1,a), (2,b), (3,b)}\n2) {(1,a), (1,b), (3,c)}\n3) {(2,4), (4,8), (6,12)}\n4) {(2,4), (2,8), (6,12)}\nNomor himpunan yang merupakan pemetaan adalah ... (jawaban lebih dari satu, tulis nomornya).",k:"13",set:1},
+  {q:"Diketahui fungsi f(x) = −2x + 5. Nilai dari f(−4) adalah ...",k:"13"},
+  {q:"Diketahui fungsi f(x) = 3 − 5x. Nilai dari f(−4) adalah ...",k:"23"},
+  {q:"Diketahui fungsi f(x) = 5x − 2. Jika f(a) = 18 dan f(b) = 23, maka a + b = ...",k:"9"},
+  {q:"Jika f(x) = 3x + 9 dengan f(k) = 33, maka nilai k adalah ...",k:"8"}
+ ]}
+};
+var MAX=3,B,viol=0,aktif=false,t0=0,tick=null,lastTs=0,ident={},skey="";
+var $=function(i){return document.getElementById(i)};
+function ls(a,k,v){try{if(a==="g")return localStorage.getItem(k);if(a==="s")localStorage.setItem(k,v);if(a==="r")localStorage.removeItem(k)}catch(e){}return null}
+function fmt(n){if(n<0)n=0;var m=Math.floor(n/60),s=n%60;return (m<10?"0":"")+m+":"+(s<10?"0":"")+s}
+
+// tanggal & bagian
+function hariStr(v){if(!v)return"";var d=new Date(v+"T00:00:00");return d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
+(function(){
+ var d=new Date(),m=("0"+(d.getMonth()+1)).slice(-2),dd=("0"+d.getDate()).slice(-2);
+ $("tgl").value=d.getFullYear()+"-"+m+"-"+dd;$("hari").textContent=hariStr($("tgl").value);
+ $("tgl").onchange=function(){$("hari").textContent=hariStr($("tgl").value)};
+ var p=new URLSearchParams(location.search).get("bagian")||location.hash.replace("#","");
+ if(p==="1"||p==="2"){$("bagian").value=p;$("bagian").disabled=true}
+})();
+
+function render(){
+ var h="";
+ B.soal.forEach(function(s,i){
+  h+='<div class="card"><div class="q">'+(i+1)+'. '+s.q.replace(/\n/g,"<br>")+'</div>';
+  if(B.jenis==="pg"){s.o.forEach(function(t,j){h+='<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'"> '+"abcd"[j]+'. '+t+'</label>'})}
+  else h+='<input type="text" id="i'+i+'" autocomplete="off" aria-label="Jawaban soal '+(i+1)+'">';
+  h+='</div>';
+ });
+ $("soal").innerHTML=h;
+}
+function mulai(){
+ var nama=$("nama").value.trim(),kelas=$("kelas").value.trim(),tgl=$("tgl").value,bg=$("bagian").value;
+ if(!nama||!kelas||!tgl){$("err").textContent="Nama, kelas, dan tanggal wajib diisi.";return}
+ $("err").textContent="";
+ B=BAGIAN[bg];ident={nama:nama,kelas:kelas,tanggal:hariStr(tgl),bagian:B.judul};
+ skey=(nama+"|"+kelas+"|"+bg).toLowerCase();
+ if(+(ls("g","att:"+skey)||0)>=2){$("err").textContent="Kesempatan mengerjakan bagian ini sudah habis (2 kali).";return}
+ var saved=ls("g","t0:"+skey);
+ t0=saved?+saved:Date.now();if(!saved)ls("s","t0:"+skey,String(t0));
+ viol=+(ls("g","v:"+skey)||0);
+ if(viol>=MAX||Date.now()-t0>=B.menit*60000){ // lanjutan yang sudah lewat batas
+  $("start").classList.add("hide");$("ujian").classList.remove("hide");render();aktif=true;selesai(viol>=MAX?"Pelanggaran melebihi batas":"Waktu habis");return}
+ $("who").textContent=nama+" ("+kelas+")";$("petunjuk").textContent=B.petunjuk;
+ $("viol").textContent="Pelanggaran: "+viol+" / "+MAX;if(viol)$("viol").classList.add("bad");
+ $("start").classList.add("hide");$("ujian").classList.remove("hide");
+ render();aktif=true;
+ try{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(function(){})}catch(e){}
+ var upd=function(){var s=B.menit*60-Math.floor((Date.now()-t0)/1000);$("timer").textContent=fmt(s);if(s<=0)selesai("Waktu habis")};
+ upd();tick=setInterval(upd,1000);
+}
+function catat(alasan){
+ if(!aktif)return;var now=Date.now();if(now-lastTs<800)return;lastTs=now;
+ viol++;ls("s","v:"+skey,String(viol));
+ var li=document.createElement("li");li.textContent=new Date().toLocaleTimeString("id-ID")+" - "+alasan;
+ var log=$("log");if(viol===1)log.innerHTML="";log.appendChild(li);
+ var v=$("viol");v.textContent="Pelanggaran: "+viol+" / "+MAX;v.classList.add("bad");
+ if(viol>=MAX){selesai("Pelanggaran melebihi batas");return}
+ $("oMsg").textContent="Pelanggaran "+viol+" dari "+MAX+" ("+alasan+"). Pada pelanggaran ke-"+MAX+", jawaban otomatis dikumpulkan.";
+ $("overlay").style.display="flex";
+}
+function angka(s){var m=String(s).replace(/\s/g,"").replace(/−/g,"-").match(/-?\d+([.,]\d+)?/);return m?m[0].replace(",","."):""}
+function cocok(s,val){
+ if(s.set){var d=(val.match(/\d/g)||[]).filter(function(x,i,a){return a.indexOf(x)===i}).sort().join("");return d===s.k}
+ var a=angka(val);return a!==""&&Number(a)===Number(s.k)
+}
+var lastJaw=[],lastInfo={};
+function esc(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML}
+function selesai(sebab){
+ if(!aktif)return;aktif=false;clearInterval(tick);$("overlay").style.display="none";
+ try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}
+ var benar=0;lastJaw=[];
+ B.soal.forEach(function(s,i){
+  if(B.jenis==="pg"){var c=document.querySelector('input[name="q'+i+'"]:checked');lastJaw.push(c?"abcd"[+c.value]:"-");if(c&&+c.value===s.a)benar++}
+  else{var v=$("i"+i).value.trim();lastJaw.push(v||"-");if(v&&cocok(s,v))benar++}
+ });
+ var att=(+(ls("g","att:"+skey)||0))+1;ls("s","att:"+skey,String(att));ls("r","t0:"+skey);ls("r","v:"+skey);
+ lastInfo={att:att,benar:benar,sebab:sebab,waktu:new Date().toLocaleString("id-ID")};
+ $("ujian").classList.add("hide");$("hasil").classList.remove("hide");
+ tampil(att>=2);
+}
+function tampil(akhir){
+ var I=lastInfo;
+ var h='<h1>Jawaban terkumpul</h1><p>'+esc(ident.nama)+' ('+esc(ident.kelas)+')<br>'+esc(ident.tanggal)+'<br>'+esc(ident.bagian)+' - '+I.sebab+'<br>Dikumpulkan: '+I.waktu+'</p>'
+  +'<p>Benar: <b>'+I.benar+' dari 10</b><br>Nilai: <b>'+(I.benar*10)+'</b><br>Pelanggaran: <b>'+viol+'</b><br>Percobaan ke-'+I.att+' dari 2</p>';
+ if(akhir){
+  h+='<p>Kesempatan mengerjakan bagian ini sudah selesai. Foto layar ini dan tunjukkan ke guru.</p>';
+ }else{
+  h+='<p>Masih ada 1 kesempatan lagi. Nilai terbaru menggantikan nilai sebelumnya. Foto layar ini dulu jika perlu.</p><button onclick="ulang()">Coba lagi</button>';
+ }
+ $("hasil").innerHTML=h;
+}
+document.addEventListener("visibilitychange",function(){if(document.hidden)catat("pindah tab / minimize")});
+window.addEventListener("blur",function(){catat("jendela kehilangan fokus")});
+document.addEventListener("fullscreenchange",function(){if(aktif&&!document.fullscreenElement)catat("keluar dari layar penuh")});
+document.addEventListener("contextmenu",function(e){if(aktif)e.preventDefault()});
+["copy","paste","cut"].forEach(function(ev){document.addEventListener(ev,function(e){if(aktif)e.preventDefault()})});
+function ulang(){$("hasil").classList.add("hide");$("log").innerHTML="<li>Belum ada.</li>";$("viol").classList.remove("bad");viol=0;lastTs=0;mulai()}
+$("mulai").onclick=mulai;
+$("kumpul").onclick=function(){if(confirm("Kumpulkan jawaban sekarang? Setelah ini tidak bisa diubah."))selesai("Dikumpulkan siswa")};
+$("lanjut").onclick=function(){$("overlay").style.display="none";if(!document.fullscreenElement){try{document.documentElement.requestFullscreen().catch(function(){})}catch(e){}}};
+</script>
+</body>
+</html>
