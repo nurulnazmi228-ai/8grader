@@ -52,6 +52,11 @@ section.menu{padding:46px 0 30px}
 .card.soon{border-style:dashed;background:transparent;align-items:center;justify-content:center;text-align:center;min-height:220px;color:var(--mute)}
 .card.soon::before{display:none}.card.soon:hover{transform:none;box-shadow:none}
 .card.soon .plus{font-family:Fraunces,Georgia,serif;font-size:2.6rem;color:var(--line);line-height:1}
+.filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.fbtn{font:inherit;font-weight:700;font-size:.9rem;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.fbtn[aria-selected="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.fbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.empty{grid-column:1/-1;text-align:center;padding:34px 16px;border:2px dashed var(--line);border-radius:20px;color:var(--mute)}
 footer{padding:26px 0 40px;text-align:center;color:var(--mute);font-size:.86rem}
 </style>
 </head>
@@ -65,7 +70,7 @@ footer{padding:26px 0 40px;text-align:center;color:var(--mute);font-size:.86rem}
   <div class="wrap">
     <div class="brand"><span class="logo" aria-hidden="true">∑</span><span id="namaSitus">Ruang Matematika</span></div>
     <h1>Belajar matematika, <em>selangkah demi selangkah.</em></h1>
-    <p>Tempat tugas, latihan, dan remedial Matematika SMP. Pilih kegiatan yang diminta gurumu, lalu kerjakan langsung dari sini.</p>
+    <p>Tempat materi, LKPD, latihan, tugas, dan remedial Matematika SMP. Pilih yang diminta gurumu, lalu buka langsung dari sini.</p>
     <a class="cta" href="#kegiatan">Lihat kegiatan</a>
   </div>
 </header>
@@ -83,7 +88,8 @@ footer{padding:26px 0 40px;text-align:center;color:var(--mute);font-size:.86rem}
   <section class="menu" id="kegiatan">
     <div class="wrap">
       <h2>Pilih kegiatan</h2>
-      <p>Kegiatan baru akan muncul di sini saat guru menambahkannya.</p>
+      <p>Materi, LKPD, dan tugas baru akan muncul di sini saat guru menambahkannya.</p>
+      <div class="filter" id="filter" role="tablist" aria-label="Kategori"></div>
       <div class="grid" id="grid"></div>
     </div>
   </section>
@@ -97,13 +103,15 @@ footer{padding:26px 0 40px;text-align:center;color:var(--mute);font-size:.86rem}
    2. Salin satu blok { ... } di bawah, tempel setelah blok terakhir (beri koma), lalu ubah isinya.
    3. buka:true  -> tombol aktif.   buka:false -> tombol abu-abu "Belum dibuka".
       Ubah buka dari false ke true saat hari pengerjaannya tiba.
+   jenis = kategori kartu: "Materi", "LKPD", "Latihan", "Tugas", atau "Remedial" (menentukan tab filter).
    tint = warna kartu (hex), ikon = satu huruf atau simbol.
+   Untuk materi/LKPD yang hanya satu tombol, cukup isi satu item di tombol.
    ====================================================== */
 var NAMA_SITUS = "Ruang Matematika";
 
 var KEGIATAN = [
   {
-    ikon: "R", tint: "#1f6f5c",
+    jenis: "Remedial", ikon: "R", tint: "#1f6f5c",
     judul: "Remedial PSTS Matematika",
     label: ["Kelas 8", "Remedial"],
     deskripsi: "Perbandingan, skala, relasi dan fungsi. Dua bagian dikerjakan di hari berbeda. Tiap bagian bisa dikerjakan 2 kali.",
@@ -115,10 +123,11 @@ var KEGIATAN = [
 ];
 
 document.getElementById("namaSitus").textContent = NAMA_SITUS;
-var grid = document.getElementById("grid");
+var JENIS = ["Semua", "Materi", "LKPD", "Latihan", "Tugas", "Remedial"];
+var grid = document.getElementById("grid"), filter = document.getElementById("filter");
 function el(tag, cls, txt){ var e = document.createElement(tag); if(cls) e.className = cls; if(txt) e.textContent = txt; return e; }
 
-KEGIATAN.forEach(function(k){
+function kartu(k){
   var c = el("article", "card"); c.style.setProperty("--tint", k.tint);
   c.appendChild(el("div", "ico", k.ikon));
   var chips = el("div", "chips"); k.label.forEach(function(l){ chips.appendChild(el("span", "chip", l)); }); c.appendChild(chips);
@@ -132,14 +141,31 @@ KEGIATAN.forEach(function(k){
     b.appendChild(el("span", "", t.buka ? "→" : "Belum dibuka"));
     a.appendChild(b);
   });
-  c.appendChild(a); grid.appendChild(c);
-});
+  c.appendChild(a); return c;
+}
 
-var soon = el("article", "card soon");
-soon.appendChild(el("div", "plus", "+"));
-soon.appendChild(el("b", "", "Segera hadir"));
-soon.appendChild(el("span", "", "Tugas dan latihan berikutnya akan ditambahkan di sini."));
-grid.appendChild(soon);
+function tampil(jenis){
+  grid.innerHTML = "";
+  var hasil = KEGIATAN.filter(function(k){ return jenis === "Semua" || k.jenis === jenis; });
+  hasil.forEach(function(k){ grid.appendChild(kartu(k)); });
+  if (jenis === "Semua") {
+    var soon = el("article", "card soon");
+    soon.appendChild(el("div", "plus", "+"));
+    soon.appendChild(el("b", "", "Segera hadir"));
+    soon.appendChild(el("span", "", "Materi, LKPD, dan tugas berikutnya akan ditambahkan di sini."));
+    grid.appendChild(soon);
+  } else if (!hasil.length) {
+    grid.appendChild(el("div", "empty", "Belum ada " + jenis + " yang ditambahkan. Pantau terus ya."));
+  }
+  Array.prototype.forEach.call(filter.children, function(b){ b.setAttribute("aria-selected", b.textContent === jenis ? "true" : "false"); });
+}
+
+JENIS.forEach(function(j){
+  var b = el("button", "fbtn", j); b.type = "button"; b.setAttribute("role", "tab");
+  b.onclick = function(){ tampil(j); };
+  filter.appendChild(b);
+});
+tampil("Semua");
 </script>
 </body>
 </html>
