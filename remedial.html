@@ -59,7 +59,7 @@ table.k{width:100%;border-collapse:collapse;font-size:.92rem;margin-bottom:12px}
   </ol>
   <ul>
     <li>Pindah tab, pindah aplikasi, atau keluar dari layar penuh dihitung pelanggaran.</li>
-    <li>Pelanggaran ke-3: jawaban otomatis dikumpulkan.</li>
+    <li>Tidak ada batas pelanggaran, tetapi setiap kali pindah tab atau keluar dari layar penuh dihitung satu pelanggaran dan tampil di hasil.</li>
     <li>Tidak ada batas waktu. Lama mengerjakanmu dicatat (tetap berjalan walau halaman ditutup) dan tampil di hasil.</li>
     <li>Tiap bagian hanya bisa dikerjakan satu kali. Jumlah pelanggaranmu dicatat dan tampil di hasil.</li>
   </ul>
@@ -71,7 +71,7 @@ table.k{width:100%;border-collapse:collapse;font-size:.92rem;margin-bottom:12px}
   <div class="bar">
     <span id="who"></span>
     <span class="badge" id="timer"></span>
-    <span class="badge" id="viol">Pelanggaran: 0 / 3</span>
+    <span class="badge" id="viol">Pelanggaran: 0</span>
   </div>
   <p id="petunjuk"></p>
   <div id="soal"></div>
@@ -120,7 +120,7 @@ var BAGIAN={
   {q:"Jika f(x) = 3x + 9 dengan f(k) = 33, maka nilai k adalah ...",k:"8"}
  ]}
 };
-var MAX=3,B,viol=0,aktif=false,t0=0,tick=null,lastTs=0,ident={},skey="";
+var B,viol=0,logArr=[],aktif=false,t0=0,tick=null,lastTs=0,ident={},skey="";
 var $=function(i){return document.getElementById(i)};
 function ls(a,k,v){try{if(a==="g")return localStorage.getItem(k);if(a==="s")localStorage.setItem(k,v);if(a==="r")localStorage.removeItem(k)}catch(e){}return null}
 function p2(x){return (x<10?"0":"")+x}
@@ -157,10 +157,10 @@ function mulai(){
  var saved=ls("g","t0:"+skey);
  t0=saved?+saved:Date.now();if(!saved)ls("s","t0:"+skey,String(t0));
  viol=+(ls("g","v:"+skey)||0);
- if(viol>=MAX){ // lanjutan yang sudah lewat batas
-  $("start").classList.add("hide");$("ujian").classList.remove("hide");render();aktif=true;selesai("Pelanggaran melebihi batas");return}
+ logArr=[];try{logArr=JSON.parse(ls("g","lg:"+skey)||"[]")}catch(e){}
+ if(logArr.length)$("log").innerHTML=logArr.map(function(x){return "<li>"+x+"</li>"}).join("");
  $("who").textContent=nama+" ("+kelas+")";$("petunjuk").textContent=B.petunjuk;
- $("viol").textContent="Pelanggaran: "+viol+" / "+MAX;if(viol)$("viol").classList.add("bad");
+ $("viol").textContent="Pelanggaran: "+viol;if(viol)$("viol").classList.add("bad");
  $("start").classList.add("hide");$("ujian").classList.remove("hide");
  render();aktif=true;
  try{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(function(){})}catch(e){}
@@ -170,11 +170,10 @@ function mulai(){
 function catat(alasan){
  if(!aktif)return;var now=Date.now();if(now-lastTs<800)return;lastTs=now;
  viol++;ls("s","v:"+skey,String(viol));
- var li=document.createElement("li");li.textContent=new Date().toLocaleTimeString("id-ID")+" - "+alasan;
+ var teks=new Date().toLocaleTimeString("id-ID")+" - "+alasan;logArr.push(teks);ls("s","lg:"+skey,JSON.stringify(logArr));var li=document.createElement("li");li.textContent=teks;
  var log=$("log");if(viol===1)log.innerHTML="";log.appendChild(li);
- var v=$("viol");v.textContent="Pelanggaran: "+viol+" / "+MAX;v.classList.add("bad");
- if(viol>=MAX){selesai("Pelanggaran melebihi batas");return}
- $("oMsg").textContent="Pelanggaran "+viol+" dari "+MAX+" ("+alasan+"). Pada pelanggaran ke-"+MAX+", jawaban otomatis dikumpulkan.";
+ var v=$("viol");v.textContent="Pelanggaran: "+viol;v.classList.add("bad");
+ $("oMsg").textContent="Pelanggaran ke-"+viol+" dicatat ("+alasan+"). Tetap kerjakan di halaman ujian ini dan jangan berpindah lagi.";
  $("overlay").style.display="flex";
 }
 function angka(s){var m=String(s).replace(/\s/g,"").replace(/−/g,"-").match(/-?\d+([.,]\d+)?/);return m?m[0].replace(",","."):""}
@@ -192,7 +191,7 @@ function selesai(sebab){
   if(B.jenis==="pg"){var c=document.querySelector('input[name="q'+i+'"]:checked');lastJaw.push(c?"abcd"[+c.value]:"-");if(c&&+c.value===s.a)benar++}
   else{var v=$("i"+i).value.trim();lastJaw.push(v||"-");if(v&&cocok(s,v))benar++}
  });
- ls("s","att:"+skey,"1");ls("r","t0:"+skey);ls("r","v:"+skey);
+ ls("s","att:"+skey,"1");ls("r","t0:"+skey);ls("r","v:"+skey);ls("r","lg:"+skey);
  lastInfo={lama:Math.floor((Date.now()-t0)/1000),benar:benar,sebab:sebab,waktu:new Date().toLocaleString("id-ID")};
  $("ujian").classList.add("hide");$("hasil").classList.remove("hide");
  tampil();
