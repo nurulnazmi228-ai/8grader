@@ -38,19 +38,40 @@ input[type=text]{width:100%;padding:10px;border:1px solid var(--line);border-rad
 .fb.ok{display:block;background:var(--okbg);color:var(--ok)}.fb.no{display:block;background:var(--badbg);color:var(--bad)}
 .fb b{display:block}.fb span{color:var(--ink);font-weight:400}
 .nav{display:flex;justify-content:space-between;gap:10px;margin:16px 0 50px}
+.tab.lock{opacity:.55;cursor:not-allowed}
+label.f{display:block;font-weight:700;font-size:.9rem;margin:10px 0 3px}
+.rekap{margin:0 0 4px;font-size:.9rem;color:var(--mute)}.rekap b{color:var(--ink)}
+.link{background:none;border:0;color:var(--main);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:0;margin-left:8px}
+.banner{background:var(--soft);border:1.5px solid var(--main);border-radius:16px;padding:14px 18px;margin-bottom:12px}
+.banner .nilai{font-family:Fraunces,Georgia,serif;font-size:2.2rem;font-weight:800;color:var(--main);line-height:1}
+.pesan{color:var(--bad);font-weight:700;margin:10px 0 0}
+input:disabled{opacity:.85}
 </style>
 </head>
 <body>
 <header><div class="wrap">
   <a href="index.html">&larr; Beranda</a><a href="materi-aljabar-7.html">Materi Aljabar</a>
   <h1>Latihan Aljabar</h1>
-  <p>Kelas 7 &middot; 6 pertemuan &times; 5 soal. Jawab, tekan <b>Periksa</b>, dan langsung lihat benar atau salah beserta pembahasannya.</p>
+  <p>Kelas 7 &middot; 6 pertemuan &times; 5 soal. Isi identitas, jawab lima soal, lalu periksa semuanya sekaligus untuk melihat nilai dan pembahasan. Pertemuan berikutnya terbuka setelah pertemuan sebelumnya selesai.</p>
 </div></header>
 <main class="wrap">
-  <div class="tabs" id="tabs" role="tablist" aria-label="Pertemuan"></div>
-  <div class="head"><h2 id="jdl"></h2><span class="skor" id="skor"></span></div>
-  <div id="soal"></div>
-  <div class="nav"><button class="btn alt" id="prev" type="button">&larr; Sebelumnya</button><button class="btn alt" id="next" type="button">Berikutnya &rarr;</button></div>
+  <section class="q" id="start" style="margin-top:20px">
+    <h2 style="font-size:1.2rem">Isi identitas dulu</h2>
+    <label class="f" for="nama">Nama</label><input type="text" id="nama" autocomplete="off">
+    <label class="f" for="kelas">Kelas</label><input type="text" id="kelas" placeholder="Contoh: 7.1" autocomplete="off">
+    <div class="hint">Tulis kelas seperti 7.1. Pertemuan dibuka satu per satu: pertemuan berikutnya terbuka setelah pertemuan sebelumnya selesai diperiksa.</div>
+    <div class="pesan" id="err"></div>
+    <button class="btn" id="mulai" type="button">Mulai latihan</button>
+  </section>
+  <div id="app" style="display:none">
+    <p class="rekap" id="rekap"></p>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Pertemuan"></div>
+    <div class="head"><h2 id="jdl"></h2></div>
+    <div id="banner"></div>
+    <div id="soal"></div>
+    <div id="aksi"></div>
+    <div class="nav"><button class="btn alt" id="prev" type="button">&larr; Sebelumnya</button><button class="btn alt" id="next" type="button">Berikutnya &rarr;</button></div>
+  </div>
 </main>
 
 <script>
@@ -123,33 +144,92 @@ function sama(a,b){
   return kx.every(function(k){return y.hasOwnProperty(k)&&Math.abs(x[k]-y[k])<1e-9});
 }
 
-var $=function(i){return document.getElementById(i)}, cur=0, hasil=L.map(function(){return [null,null,null,null,null]});
-function tabs(){ $("tabs").innerHTML=JUDUL.map(function(_,i){return '<button class="tab" role="tab" aria-selected="'+(i===cur)+'" onclick="buka('+i+')">Pertemuan '+(i+1)+'</button>'}).join(""); }
-function skor(){ var h=hasil[cur],b=h.filter(function(x){return x===true}).length,d=h.filter(function(x){return x!==null}).length; $("skor").textContent="Benar pada percobaan pertama: "+b+" dari "+d+" dijawab (5 soal)"; }
-function buka(i){
-  cur=i; $("jdl").textContent="Pertemuan "+(i+1)+": "+JUDUL[i]; tabs();
-  $("soal").innerHTML=L[i].map(function(s,n){
+var $=function(i){return document.getElementById(i)}, cur=0, ID=null, PR=null, ulang=false, SK="aljabar7:";
+function kunci(){return SK+"p:"+ID.nama.toLowerCase().replace(/\s+/g," ")+"|"+ID.kelas}
+function muat(){ PR=null; try{PR=JSON.parse(localStorage.getItem(kunci())||"null")}catch(e){} if(!PR||!PR.n) PR={n:[null,null,null,null,null,null]}; }
+function simpan(){ try{localStorage.setItem(kunci(),JSON.stringify(PR))}catch(e){} }
+function terbuka(i){ return i===0||PR.n[i-1]!==null; }
+
+function rekap(){
+  var h="<b>"+ID.nama+"</b> (kelas "+ID.kelas+") &middot; Nilai: "+PR.n.map(function(x,i){return "P"+(i+1)+" = "+(x?x.nilai:"-")}).join(" &middot; ");
+  $("rekap").innerHTML=h+'<button class="link" id="ganti" type="button">Ganti siswa</button>';
+  $("ganti").onclick=function(){ $("app").style.display="none"; $("start").style.display="block"; };
+}
+function tabs(){
+  $("tabs").innerHTML=JUDUL.map(function(_,i){
+    var k=!terbuka(i), d=PR.n[i];
+    return '<button class="tab'+(k?" lock":"")+'" role="tab" aria-selected="'+(i===cur)+'" '+(k?'aria-disabled="true" title="Selesaikan pertemuan sebelumnya dulu" ':'')+'onclick="buka('+i+')">Pertemuan '+(i+1)+(k?" 🔒":(d?" ✓ "+d.nilai:""))+'</button>';
+  }).join("");
+}
+function formSoal(i){
+  return L[i].map(function(s,n){
     var f=s.j==="pg"
       ? s.o.map(function(t,k){return '<label class="opt"><input type="radio" name="r'+n+'" value="'+k+'"> '+"abcd"[k]+". "+t+'</label>'}).join("")
-      : '<input type="text" id="t'+n+'" autocomplete="off" aria-label="Jawaban soal '+(n+1)+'">'+(s.h?'<div class="hint">'+s.h+'</div>':'<div class="hint">Tulis jawabanmu, lalu tekan Periksa.</div>');
-    return '<div class="q" id="q'+n+'"><div class="no">Soal '+(n+1)+'</div><p>'+s.q+'</p>'+f+'<button class="btn" onclick="periksa('+n+')">Periksa</button><div class="fb" id="f'+n+'"></div></div>';
+      : '<input type="text" id="t'+n+'" autocomplete="off" aria-label="Jawaban soal '+(n+1)+'">'+(s.h?'<div class="hint">'+s.h+'</div>':'');
+    return '<div class="q" id="q'+n+'"><div class="no">Soal '+(n+1)+'</div><p>'+s.q+'</p>'+f+'<div class="fb" id="f'+n+'"></div></div>';
   }).join("");
-  hasil[i]=[null,null,null,null,null]; skor();
-  $("prev").style.visibility=i?"visible":"hidden"; $("next").style.visibility=i<5?"visible":"hidden";
+}
+function buka(i,u){
+  if(!terbuka(i)) return;
+  cur=i; ulang=!!u; $("jdl").textContent="Pertemuan "+(i+1)+": "+JUDUL[i];
+  $("soal").innerHTML=formSoal(i); $("banner").innerHTML=""; $("aksi").innerHTML="";
+  var d=PR.n[i];
+  if(d&&!ulang){ isiJawaban(d.jaw); tampilHasil(d.jaw); }
+  else $("aksi").innerHTML='<p class="hint" style="margin:0 0 6px">Jawab kelima soal, lalu tekan tombol di bawah. Nilai dan pembahasan muncul setelah semuanya diperiksa.</p><button class="btn" onclick="periksaSemua()">Periksa semua jawaban</button><div class="pesan" id="pesan"></div>';
+  tabs(); rekap();
+  $("prev").style.visibility=i?"visible":"hidden";
+  $("next").style.visibility=i<5?"visible":"hidden"; $("next").disabled=!terbuka(i+1); $("next").style.opacity=terbuka(i+1)?1:.5;
   history.replaceState(null,"","#p"+(i+1)); window.scrollTo({top:0});
 }
-function periksa(n){
-  var s=L[cur][n],ok,fb=$("f"+n);
-  if(s.j==="pg"){ var c=document.querySelector('input[name="r'+n+'"]:checked'); if(!c){fb.className="fb no";fb.innerHTML="<b>Pilih salah satu jawaban dulu.</b>";return} ok=(+c.value===s.a); }
-  else { var v=$("t"+n).value.trim(); if(!v){fb.className="fb no";fb.innerHTML="<b>Isi jawabanmu dulu.</b>";return} ok=sama(v,s.a); }
-  if(hasil[cur][n]===null) hasil[cur][n]=ok;
-  var kunci=s.j==="pg"?"abcd"[s.a]+". "+s.o[s.a]:s.a.replace(/\^2/g,"²").replace(/-/g,"−");
-  fb.className="fb "+(ok?"ok":"no");
-  fb.innerHTML=ok?'<b>Benar!</b><span>'+s.p+'</span>':'<b>Belum tepat.</b><span>Jawaban yang benar: <b style="display:inline">'+kunci+'</b>. '+s.p+'</span>';
-  skor();
+function isiJawaban(jaw){
+  jaw.forEach(function(v,n){
+    if(L[cur][n].j==="pg"){ var r=document.querySelector('input[name="r'+n+'"][value="'+v+'"]'); if(r) r.checked=true; }
+    else $("t"+n).value=v;
+  });
+}
+function benar(s,v){ return s.j==="pg" ? v===s.a : sama(v,s.a); }
+function periksaSemua(){
+  var jaw=[],kosong=[];
+  L[cur].forEach(function(s,n){
+    var v=null;
+    if(s.j==="pg"){ var c=document.querySelector('input[name="r'+n+'"]:checked'); v=c?+c.value:null; }
+    else { var t=$("t"+n).value.trim(); v=t===""?null:t; }
+    if(v===null) kosong.push(n+1); jaw.push(v);
+  });
+  if(kosong.length){ $("pesan").textContent="Soal nomor "+kosong.join(", ")+" belum dijawab. Lengkapi dulu semua jawaban."; var q=$("q"+(kosong[0]-1)); if(q) q.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+  var b=0; jaw.forEach(function(v,n){ if(benar(L[cur][n],v)) b++; });
+  if(!ulang&&PR.n[cur]===null){ PR.n[cur]={nilai:b*20,benar:b,jaw:jaw}; simpan(); }
+  tampilHasil(jaw); tabs(); rekap(); $("next").disabled=!terbuka(cur+1); $("next").style.opacity=terbuka(cur+1)?1:.5;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function tampilHasil(jaw){
+  var b=0;
+  jaw.forEach(function(v,n){
+    var s=L[cur][n], ok=benar(s,v); if(ok) b++;
+    var kunciTeks=s.j==="pg"?"abcd"[s.a]+". "+s.o[s.a]:s.a.replace(/\^2/g,"²").replace(/-/g,"−");
+    var fb=$("f"+n); fb.className="fb "+(ok?"ok":"no");
+    fb.innerHTML=ok?'<b>Benar!</b><span>'+s.p+'</span>':'<b>Belum tepat.</b><span>Jawaban yang benar: <b style="display:inline">'+kunciTeks+'</b>. '+s.p+'</span>';
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("#soal input"),function(e){e.disabled=true});
+  var d=PR.n[cur], nilai=b*20;
+  var h='<div class="lbl" style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)">'+(ulang?"Hasil latihan ulang":"Hasil latihan")+'</div><div class="nilai">'+nilai+'</div><div>Benar '+b+' dari 5 soal &middot; '+ID.nama+' (kelas '+ID.kelas+')</div>';
+  if(ulang&&d) h+='<div class="hint">Nilai pertamamu tetap tercatat: '+d.nilai+'.</div>';
+  else h+='<div class="hint">Foto layar ini dan tunjukkan ke guru jika diminta.</div>';
+  $("banner").innerHTML='<div class="banner">'+h+'</div>';
+  $("aksi").innerHTML='<button class="btn alt" onclick="buka(cur,true)">Ulangi latihan (nilai pertama tetap)</button>'+(cur<5?' <button class="btn" onclick="buka(cur+1)">Lanjut ke Pertemuan '+(cur+2)+' &rarr;</button>':'');
 }
 $("prev").onclick=function(){buka(cur-1)}; $("next").onclick=function(){buka(cur+1)};
-var m=/^#p([1-6])$/.exec(location.hash); buka(m?+m[1]-1:0);
+
+try{ var sv=JSON.parse(localStorage.getItem(SK+"id")||"null"); if(sv){ $("nama").value=sv.nama||""; $("kelas").value=sv.kelas||""; } }catch(e){}
+$("mulai").onclick=function(){
+  var n=$("nama").value.trim().replace(/\s+/g," "), k=$("kelas").value.trim().replace(",",".");
+  if(!n){ $("err").textContent="Nama wajib diisi."; return; }
+  if(!/^\d\.\d{1,2}$/.test(k)){ $("err").textContent="Tulis kelas seperti 7.1 (angka, titik, angka)."; return; }
+  $("err").textContent=""; ID={nama:n,kelas:k}; try{localStorage.setItem(SK+"id",JSON.stringify(ID))}catch(e){}
+  muat(); $("start").style.display="none"; $("app").style.display="block";
+  var m=/^#p([1-6])$/.exec(location.hash), mulai=PR.n.findIndex(function(x){return x===null}); if(mulai<0) mulai=5;
+  var tuju=m?+m[1]-1:mulai; buka(terbuka(tuju)?tuju:mulai);
+};
 </script>
 </body>
 </html>
