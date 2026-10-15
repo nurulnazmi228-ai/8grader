@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tugas Unsur-unsur Bentuk Aljabar | Ruang Matematika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ec;--grid:rgba(31,111,92,.08);--card:#fff;--ink:#17261f;--mute:#5d6b64;--line:#dcd8c9;--hero:#0f3d33;--chalk:#f4f1e6;--accent:#f2b134;--main:#1f6f5c;--soft:#e9f2ee;--ok:#1b7f4b;--okbg:#e4f5ea;--bad:#b3261e;--badbg:#fdeceb;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1714;--grid:rgba(79,191,159,.07);--card:#18231f;--ink:#e8efe9;--mute:#9cb0a7;--line:#2b3a34;--hero:#0a2a23;--main:#4fbf9f;--soft:#1f302a;--ok:#6fdc9f;--okbg:#17301f;--bad:#ff8a80;--badbg:#3a1f1d}}
+:root[data-theme="dark"]{--bg:#0f1714;--grid:rgba(79,191,159,.07);--card:#18231f;--ink:#e8efe9;--mute:#9cb0a7;--line:#2b3a34;--hero:#0a2a23;--main:#4fbf9f;--soft:#1f302a;--ok:#6fdc9f;--okbg:#17301f;--bad:#ff8a80;--badbg:#3a1f1d}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:"DM Sans",system-ui,"Segoe UI",Arial,sans-serif;line-height:1.6;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.wrap{max-width:780px;margin:0 auto;padding:0 18px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;line-height:1.2}
+header{background:var(--hero);color:var(--chalk);border-radius:0 0 28px 28px;padding:18px 0 30px}
+header a{color:var(--accent);text-decoration:none;font-weight:700;font-size:.92rem;margin-right:14px}
+header h1{font-size:clamp(1.6rem,5vw,2.3rem);margin:16px 0 6px}header p{margin:0;color:rgba(244,241,230,.85)}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:14px 0}
+.lbl{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+label.f{display:block;font-weight:700;font-size:.85rem;margin:8px 0 3px}
+input[type=text]{width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=text]:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input.ok{border-color:var(--ok);background:var(--okbg)}input.no{border-color:var(--bad);background:var(--badbg)}
+.btn{font:inherit;font-weight:700;background:var(--main);color:#fff;border:0;border-radius:10px;padding:10px 20px;cursor:pointer}
+.link{background:none;border:0;color:var(--main);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:0;margin-left:8px}
+.hint{font-size:.84rem;color:var(--mute);margin:4px 0 0}
+.pesan{color:var(--bad);font-weight:700;margin:8px 0 0}
+.exp{font-family:"Cambria Math",Cambria,Georgia,serif;font-weight:700;font-size:1.15rem;margin-bottom:2px}
+.cells{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}@media(max-width:520px){.cells{grid-template-columns:1fr}}
+.kunci{font-size:.8rem;color:var(--bad);margin-top:2px}
+.banner{background:var(--soft);border:1.5px solid var(--main);border-radius:16px;padding:14px 18px;margin:14px 0}
+.banner .nilai{font-family:Fraunces,Georgia,serif;font-size:2.4rem;font-weight:800;color:var(--main);line-height:1}
+.rekap{margin:16px 0 0;font-size:.9rem;color:var(--mute)}.rekap b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a href="index.html">&larr; Beranda</a><a href="materi-aljabar-7.html#p1">Materi Pertemuan 1</a>
+  <h1>Unsur-unsur Bentuk Aljabar</h1>
+  <p>Tugas Pertemuan 1 &middot; Kelas 7. Bagian A melengkapi tabel unsur, Bagian B menuliskan bentuk aljabar dari cerita.</p>
+</div></header>
+<main class="wrap">
+  <section class="sec" id="start">
+    <h2 style="font-size:1.2rem">Isi identitas dulu</h2>
+    <label class="f" for="nama">Nama</label><input type="text" id="nama" autocomplete="off">
+    <label class="f" for="kelas">Kelas</label><input type="text" id="kelas" placeholder="Contoh: 7.1" autocomplete="off">
+    <div class="pesan" id="err"></div>
+    <p><button class="btn" id="mulai" type="button">Mulai mengerjakan</button></p>
+  </section>
+
+  <div id="app" style="display:none">
+    <p class="rekap" id="rekap"></p>
+    <div id="banner"></div>
+    <section class="sec">
+      <div class="lbl">Bagian A</div><h2 style="font-size:1.2rem">Tentukan unsur-unsur bentuk aljabar</h2>
+      <p class="hint" style="font-size:.9rem">Pisahkan jawaban yang lebih dari satu dengan koma. Contoh untuk <b>3x − 2y + 6</b>: suku <b>3x, −2y, 6</b>; variabel <b>x, y</b>; koefisien <b>3, −2</b>; konstanta <b>6</b>. Jika variabel berdiri sendiri (misalnya c), koefisiennya 1; jika didahului tanda minus (−c), koefisiennya −1. Jika tidak ada konstanta, tulis 0.</p>
+    </section>
+    <div id="tabel"></div>
+    <section class="sec"><div class="lbl">Bagian B</div><h2 style="font-size:1.2rem">Tuliskan bentuk aljabar sesuai cerita</h2><p class="hint" style="font-size:.9rem">Cukup tuliskan bentuk aljabarnya, tanpa menghitung nilainya.</p></section>
+    <div id="cerita"></div>
+    <section class="sec" id="aksi"><p class="hint" style="margin:0 0 8px">Nilai: Bagian A 70% dan Bagian B 30%. Setelah diperiksa, jawaban dikunci dan hanya bisa dikerjakan satu kali.</p><button class="btn" id="periksa" type="button">Periksa jawaban</button><div class="pesan" id="pesan"></div></section>
+  </div>
+</main>
+
+<script>
+var SHOW_KUNCI = false; /* true = tampilkan jawaban benar pada kolom yang salah */
+var ROWS = ["5a + 2b − 4","8x − 3y + 7","4m + n − 9","6p − 2q + 5","9a + 4b − c","7x + 8","2y − 5z + 10","3m + 2n − 6","a + b + c + 4","11p − 3q − 2","14x + 5y − 8","2a − 7b + 3c + 1","5m + 9n − 12"];
+var CERITA = [
+ {q:"Ani memiliki x buah apel. Ayah membeli lagi 7 apel untuk Ani. Tuliskan bentuk aljabarnya!",k:"x+7"},
+ {q:"Dodi mempunyai m kelereng. Ia kehilangan 4 kelereng saat bermain. Tuliskan bentuk aljabarnya!",k:"m-4"},
+ {q:"Sebuah toko memiliki p buku tulis. Kemudian datang lagi 12 buku baru. Tuliskan bentuk aljabarnya!",k:"p+12"},
+ {q:"Sinta memiliki y pensil warna. Ia memberikan 3 pensil warna kepada temannya. Tuliskan bentuk aljabarnya!",k:"y-3"}
+];
+var KOL = [["s","Suku","Pisahkan dengan koma"],["v","Variabel","Contoh: x, y"],["k","Koefisien","Contoh: 3, −2"],["n","Konstanta","Satu bilangan (tidak ada: 0)"]];
+
+function norm(s){return String(s).toLowerCase().replace(/rp|\s/g,"").replace(/[−–]/g,"-").replace(/[×*·]/g,"").replace(/²/g,"^2").replace(/(\d)\.(?=\d{3}(\D|$))/g,"$1").replace(/,/g,".")}
+function poly(s){
+  s=norm(s); if(!s||/[()=\/]/.test(s)) return null;
+  var ts=s.match(/[+-]?[^+-]+/g); if(!ts||ts.join("")!==s) return null; var m={};
+  for(var i=0;i<ts.length;i++){
+    var r=/^([+-]?)(\d*\.?\d*)([a-z^0-9]*)$/.exec(ts[i]); if(!r) return null;
+    var v=r[3].replace(/([a-z])\^(\d)/g,function(x,l,n){return Array(+n+1).join(l)}); if(/[^a-z]/.test(v)) return null;
+    v=v.split("").sort().join(""); var c=r[2]===""?(v===""?NaN:1):parseFloat(r[2]); if(isNaN(c)) return null;
+    m[v]=(m[v]||0)+(r[1]==="-"?-c:c);
+  }
+  for(var k in m) if(Math.abs(m[k])<1e-9) delete m[k]; return m;
+}
+function sama(a,b){var x=poly(a),y=poly(b); if(!x||!y) return false; var kx=Object.keys(x),ky=Object.keys(y); if(kx.length!==ky.length) return false; return kx.every(function(k){return y.hasOwnProperty(k)&&Math.abs(x[k]-y[k])<1e-9})}
+
+function kanon(t){ var m=/^([+-]?)(\d*)([a-z]*)$/.exec(norm(t)); if(!m) return null; var c=m[2]===""?(m[3]===""?NaN:1):+m[2]; if(isNaN(c)) return null; return (m[1]==="-"?-c:c)+"|"+m[3]; }
+function urai(e){
+  var K={suku:[],vars:[],koef:[],konst:0,ada:false}, ts=norm(e).match(/[+-]?[^+-]+/g);
+  ts.forEach(function(t){ var m=/^([+-]?)(\d*)([a-z]*)$/.exec(t), sg=m[1]==="-"?-1:1;
+    if(m[3]===""){ K.konst+=sg*(+m[2]); K.suku.push(kanon(t)); K.ada=true; } else { K.suku.push(kanon(t)); K.vars.push(m[3]); K.koef.push(sg*(m[2]===""?1:+m[2])); } });
+  K.konst+=0; K.suku.sort(); K.vars.sort(); K.koef.sort(function(a,b){return a-b}); return K;
+}
+function potong(v){
+  var s=String(v).replace(/[−–]/g,"-").replace(/([+-])\s+/g,"$1");
+  return s.split(/[,;\n]|\bdan\b|\s+/).filter(Boolean).reduce(function(a,p){return a.concat(p.split(/(?=[+-])/))},[]).filter(Boolean);
+}
+function samaList(a,b){ return a.length===b.length&&a.every(function(x,i){return x===b[i]}); }
+function cekSuku(v,K){ var it=potong(v).map(kanon); if(!it.length||it.indexOf(null)>=0) return false; return samaList(it.sort(),K.suku); }
+function cekVar(v,K){ return samaList((String(v).toLowerCase().match(/[a-z]/g)||[]).sort(),K.vars); }
+function cekKoef(v,K){ var n=(norm(v).match(/[+-]?\d+/g)||[]).map(Number).sort(function(a,b){return a-b}); return samaList(n,K.koef); }
+function cekKonst(v,K){ if(!K.ada) return /^(0|-|nol|kosong|tidak ?ada|tdk ?ada)$/i.test(String(v).trim().replace(/[−–]/g,"-")); var m=norm(v).match(/[+-]?\d+/); return !!m&&+m[0]===K.konst; }
+function teksKunci(K,x){ return x==="s"?K.suku.map(function(s){var p=s.split("|"),c=+p[0];return (c===1&&p[1]?"":c===-1&&p[1]?"-":c)+p[1]}).join(", "):x==="v"?K.vars.join(", "):x==="k"?K.koef.join(", "):String(K.konst); }
+
+var $=function(i){return document.getElementById(i)}, ID=null, SK="tugas-aljabar7-p1:", KUNCI=ROWS.map(urai);
+function id(){return ID.nama.toLowerCase().replace(/\s+/g," ")+"|"+ID.kelas}
+function get(k){try{return JSON.parse(localStorage.getItem(SK+k+":"+id())||"null")}catch(e){return null}}
+function put(k,v){try{localStorage.setItem(SK+k+":"+id(),JSON.stringify(v))}catch(e){}}
+
+function bangun(){
+  $("tabel").innerHTML=ROWS.map(function(r,i){
+    return '<div class="sec"><div class="lbl">Nomor '+(i+1)+'</div><div class="exp">'+r+'</div><div class="cells">'+KOL.map(function(c){
+      return '<div><label class="f" for="a'+i+'-'+c[0]+'">'+c[1]+'</label><input type="text" id="a'+i+'-'+c[0]+'" data-i="a'+i+'-'+c[0]+'" placeholder="'+c[2]+'" autocomplete="off"><div class="kunci" id="x'+i+'-'+c[0]+'"></div></div>';
+    }).join("")+'</div></div>';
+  }).join("");
+  $("cerita").innerHTML=CERITA.map(function(c,i){
+    return '<div class="sec"><div class="lbl">Cerita '+(i+1)+'</div><p style="margin:0 0 6px">'+c.q+'</p><input type="text" id="b'+i+'" data-i="b'+i+'" placeholder="Tulis bentuk aljabar" autocomplete="off" aria-label="Jawaban cerita '+(i+1)+'"></div>';
+  }).join("");
+  var d=get("d")||{}; document.querySelectorAll("[data-i]").forEach(function(e){ e.value=d[e.dataset.i]||""; e.oninput=function(){ var o=ambil(); put("d",o); }; });
+}
+function ambil(){ var o={}; document.querySelectorAll("[data-i]").forEach(function(e){o[e.dataset.i]=e.value.trim()}); return o; }
+function hitung(v){
+  var oks={},bA=0,bB=0;
+  ROWS.forEach(function(r,i){ var K=KUNCI[i];
+    var c={s:cekSuku(v["a"+i+"-s"],K),v:cekVar(v["a"+i+"-v"],K),k:cekKoef(v["a"+i+"-k"],K),n:cekKonst(v["a"+i+"-n"],K)};
+    for(var x in c){ oks["a"+i+"-"+x]=c[x]; if(c[x]) bA++; } });
+  CERITA.forEach(function(c,i){ var ok=sama(v["b"+i]||"",c.k); oks["b"+i]=ok; if(ok) bB++; });
+  return {oks:oks,bA:bA,bB:bB,nilai:Math.round(70*bA/(ROWS.length*4)+30*bB/CERITA.length)};
+}
+function tampil(res){
+  document.querySelectorAll("[data-i]").forEach(function(e){
+    e.disabled=true; e.className=res.oks[e.dataset.i]?"ok":"no";
+    if(SHOW_KUNCI&&!res.oks[e.dataset.i]){
+      var m=/^a(\d+)-(\w)$/.exec(e.dataset.i), t=m?teksKunci(KUNCI[+m[1]],m[2]):CERITA[+e.dataset.i.slice(1)].k.replace("-","−");
+      var k=m?$("x"+m[1]+"-"+m[2]):e.parentNode.appendChild(document.createElement("div")); if(!m) k.className="kunci"; k.textContent="Kunci: "+t;
+    }
+  });
+  $("banner").innerHTML='<div class="banner"><div class="lbl">Hasil tugas</div><div class="nilai">'+res.nilai+'</div><div>Bagian A: '+res.bA+' dari '+(ROWS.length*4)+' kolom benar &middot; Bagian B: '+res.bB+' dari '+CERITA.length+' soal benar</div><div class="hint">Kolom hijau benar, kolom merah belum tepat. Foto layar ini dan tunjukkan ke guru.</div></div>';
+  $("aksi").style.display="none"; window.scrollTo({top:0,behavior:"smooth"});
+}
+$("periksa").onclick=function(){
+  var v=ambil(), kosong=Object.keys(v).filter(function(k){return v[k]===""}).length;
+  var tanya=kosong?"Masih ada "+kosong+" kolom kosong. Tetap periksa sekarang? Jawaban akan dikunci.":"Periksa sekarang? Setelah diperiksa, jawaban dikunci.";
+  if(!confirm(tanya)) return;
+  var res=hitung(v); res.vals=v; put("r",res); tampil(res);
+};
+function rekap(){ var r=get("r"); $("rekap").innerHTML="<b>"+ID.nama+"</b> (kelas "+ID.kelas+")"+(r?" &middot; Nilai: <b>"+r.nilai+"</b>":"")+'<button class="link" id="ganti" type="button">Ganti siswa</button>'; $("ganti").onclick=function(){$("app").style.display="none";$("start").style.display="block";}; }
+try{ var sv=JSON.parse(localStorage.getItem(SK+"id")||"null"); if(sv){ $("nama").value=sv.nama||""; $("kelas").value=sv.kelas||""; } }catch(e){}
+$("mulai").onclick=function(){
+  var n=$("nama").value.trim().replace(/\s+/g," "), k=$("kelas").value.trim().replace(",",".");
+  if(!n){ $("err").textContent="Nama wajib diisi."; return; }
+  if(!/^\d\.\d{1,2}$/.test(k)){ $("err").textContent="Tulis kelas seperti 7.1 (angka, titik, angka)."; return; }
+  $("err").textContent=""; ID={nama:n,kelas:k}; try{localStorage.setItem(SK+"id",JSON.stringify(ID))}catch(e){}
+  $("start").style.display="none"; $("app").style.display="block"; $("aksi").style.display="block"; $("banner").innerHTML="";
+  bangun(); var r=get("r"); if(r){ document.querySelectorAll("[data-i]").forEach(function(e){e.value=r.vals[e.dataset.i]||""}); tampil(r); } rekap(); window.scrollTo({top:0});
+};
+</script>
+</body>
+</html>
