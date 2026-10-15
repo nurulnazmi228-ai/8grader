@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LKPD Aplikasi Bilangan Bulat | Ruang Matematika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#f6f4ec;--grid:rgba(31,111,92,.08);--card:#fff;--ink:#17261f;--mute:#5d6b64;--line:#dcd8c9;--hero:#0f3d33;--chalk:#f4f1e6;--accent:#f2b134;--main:#1f6f5c;--soft:#e9f2ee;--paper:#fffaf0;--ok:#1b7f4b;--okbg:#e4f5ea;--bad:#b3261e;--badbg:#fdeceb;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1714;--grid:rgba(79,191,159,.07);--card:#18231f;--ink:#e8efe9;--mute:#9cb0a7;--line:#2b3a34;--hero:#0a2a23;--main:#4fbf9f;--soft:#1f302a;--paper:#1d2a24;--ok:#6fdc9f;--okbg:#17301f;--bad:#ff8a80;--badbg:#3a1f1d}}
+:root[data-theme="dark"]{--bg:#0f1714;--grid:rgba(79,191,159,.07);--card:#18231f;--ink:#e8efe9;--mute:#9cb0a7;--line:#2b3a34;--hero:#0a2a23;--main:#4fbf9f;--soft:#1f302a;--paper:#1d2a24;--ok:#6fdc9f;--okbg:#17301f;--bad:#ff8a80;--badbg:#3a1f1d}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:"DM Sans",system-ui,"Segoe UI",Arial,sans-serif;line-height:1.6;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.wrap{max-width:780px;margin:0 auto;padding:0 18px}
+h1,h2{font-family:Fraunces,Georgia,serif;margin:0;line-height:1.2}
+header{background:var(--hero);color:var(--chalk);border-radius:0 0 28px 28px;padding:18px 0 30px}
+header a{color:var(--accent);text-decoration:none;font-weight:700;font-size:.92rem}
+header h1{font-size:clamp(1.6rem,5vw,2.3rem);margin:16px 0 6px}header p{margin:0;color:rgba(244,241,230,.85)}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:14px 0}
+.lbl{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.bag{background:var(--paper);border-left:6px solid var(--accent)}
+label.f{display:block;font-weight:700;font-size:.85rem;margin:8px 0 3px}
+input[type=text]{width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:1.05rem}
+input:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+input.ok{border-color:var(--ok);background:var(--okbg)}input.no{border-color:var(--bad);background:var(--badbg)}
+.btn{font:inherit;font-weight:700;background:var(--main);color:#fff;border:0;border-radius:10px;padding:10px 20px;cursor:pointer}
+.btn.alt{background:transparent;color:var(--main);border:1.5px solid var(--main)}
+.link{background:none;border:0;color:var(--main);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:0;margin-left:8px}
+.hint{font-size:.84rem;color:var(--mute);margin:4px 0 0}
+.pesan{color:var(--bad);font-weight:700;margin:8px 0 0}
+.q p{margin:0 0 8px}.fb{margin-top:8px;padding:9px 12px;border-radius:10px;display:none;font-size:.94rem}
+.fb.ok{display:block;background:var(--okbg);color:var(--ok)}.fb.no{display:block;background:var(--badbg);color:var(--bad)}.fb span{color:var(--ink)}
+.banner{background:var(--soft);border:1.5px solid var(--main);border-radius:16px;padding:14px 18px;margin:14px 0}
+.banner .nilai{font-family:Fraunces,Georgia,serif;font-size:2.4rem;font-weight:800;color:var(--main);line-height:1}
+.rekap{margin:16px 0 0;font-size:.9rem;color:var(--mute)}.rekap b{color:var(--ink)}
+.aks{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+@media print{body{background:#fff;color:#000}header,#start,.aks,.rekap,#aksi{display:none}.sec{break-inside:avoid;border-color:#999}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a href="index.html">&larr; Beranda</a>
+  <h1>LKPD Aplikasi Bilangan Bulat</h1>
+  <p>Kelas 7 &middot; 4 bagian soal cerita. Jawab semua soal, periksa, lalu unduh PDF untuk dipelajari lagi.</p>
+</div></header>
+<main class="wrap">
+  <section class="sec" id="start">
+    <h2 style="font-size:1.2rem">Isi identitas dulu</h2>
+    <label class="f" for="nama">Nama</label><input type="text" id="nama" autocomplete="off">
+    <label class="f" for="kelas">Kelas</label><input type="text" id="kelas" placeholder="Contoh: 7.1" autocomplete="off">
+    <div class="pesan" id="err"></div>
+    <p><button class="btn" id="mulai" type="button">Mulai mengerjakan</button></p>
+  </section>
+  <div id="app" style="display:none">
+    <p class="rekap" id="rekap"></p>
+    <div id="banner"></div>
+    <div id="isi"></div>
+    <section class="sec" id="aksi"><p class="hint" style="margin:0 0 8px">Tulis jawaban berupa bilangan bulat saja (satuan tidak perlu). Gunakan tanda minus (-) jika hasilnya negatif. Setelah diperiksa, jawaban dikunci.</p><button class="btn" id="periksa" type="button">Periksa jawaban</button><div class="pesan" id="pesan"></div></section>
+  </div>
+</main>
+
+<script>
+var SHOW_KUNCI = true; /* true = tampilkan kunci dan pembahasan setelah diperiksa (juga masuk PDF) */
+var B = [
+ {j:"A", t:"Suhu dan Cuaca", s:[
+  {q:"Di puncak sebuah gunung, suhu pagi hari -3 °C. Menjelang malam suhu turun 5 °C. Berapa °C suhu di puncak gunung pada malam hari?",k:-8,p:"-3 - 5 = -8. Turun berarti dikurangi, hasilnya -8 °C."},
+  {q:"Suhu di dalam kulkas -4 °C, sedangkan suhu di dalam freezer -18 °C. Berapa °C selisih suhu kulkas dan freezer?",k:14,p:"Selisih = -4 - (-18) = -4 + 18 = 14 °C."},
+  {q:"Suhu sebuah kota pagi hari 12 °C. Siang hari naik 9 °C, lalu malam hari turun 15 °C. Berapa °C suhu kota pada malam hari?",k:6,p:"12 + 9 - 15 = 21 - 15 = 6 °C."}]},
+ {j:"B", t:"Uang dan Tabungan (dalam ribuan rupiah)", s:[
+  {q:"Dika memiliki tabungan 120 (ribu rupiah). Ia membeli buku seharga 45 dan membayar utang 100. Berapa (ribu rupiah) saldo Dika sekarang? Tulis dengan tanda minus jika ia masih berutang.",k:-25,p:"120 - 45 - 100 = -25. Saldonya -25 berarti Dika masih kekurangan 25 ribu rupiah."},
+  {q:"Sebuah warung mencatat untung 30 pada hari Senin, rugi 12 pada hari Selasa, rugi 8 pada hari Rabu, dan untung 25 pada hari Kamis (dalam ribu rupiah). Berapa total untung atau rugi selama empat hari tersebut?",k:35,p:"Untung ditulis positif dan rugi negatif: 30 + (-12) + (-8) + 25 = 35. Total untung 35 ribu rupiah."},
+  {q:"Bu Rina berutang 75 (ribu rupiah), lalu menerima gaji 200 dan membayar tagihan listrik 60. Berapa (ribu rupiah) uang Bu Rina sekarang?",k:65,p:"-75 + 200 - 60 = 125 - 60 = 65 ribu rupiah."}]},
+ {j:"C", t:"Ketinggian dan Kedalaman", s:[
+  {q:"Seorang penyelam berada di kedalaman -18 meter dari permukaan laut. Ia naik 7 meter. Berapa meter posisinya sekarang?",k:-11,p:"-18 + 7 = -11. Penyelam berada 11 meter di bawah permukaan laut."},
+  {q:"Sebuah gedung memiliki 3 lantai basement (lantai -3 adalah yang terdalam). Lift naik dari lantai -3 sebanyak 8 lantai. Di lantai berapa lift berhenti?",k:5,p:"-3 + 8 = 5. Lift berhenti di lantai 5."},
+  {q:"Sebuah kapal selam berada pada ketinggian -120 meter, sedangkan sebuah pesawat pengintai terbang pada ketinggian 250 meter. Berapa meter selisih ketinggian keduanya?",k:370,p:"250 - (-120) = 250 + 120 = 370 meter."}]},
+ {j:"D", t:"Skor Permainan", s:[
+  {q:"Dalam sebuah kuis, jawaban benar mendapat +4, jawaban salah -2, dan tidak dijawab 0. Dina menjawab 15 soal benar, 5 soal salah, dan 2 soal tidak dijawab. Berapa skor akhir Dina?",k:50,p:"(15 x 4) + (5 x (-2)) + 0 = 60 - 10 = 50."},
+  {q:"Dalam sebuah permainan, setiap kartu merah mengurangi 3 poin. Sebuah tim menerima 6 kartu merah. Berapa perubahan poin tim tersebut?",k:-18,p:"6 x (-3) = -18. Poin tim berkurang 18."},
+  {q:"Sebuah tim kehilangan 48 poin (ditulis -48) dan kerugian itu dibagi rata kepada 6 pemain. Berapa poin yang ditanggung setiap pemain?",k:-8,p:"(-48) : 6 = -8. Tiap pemain menanggung -8 poin."}]}
+];
+var TOTAL = B.reduce(function(a,b){return a+b.s.length},0);
+var $=function(i){return document.getElementById(i)}, ID=null, SK="lkpd-bilangan-bulat7:";
+function idk(){return ID.nama.toLowerCase().replace(/\s+/g," ")+"|"+ID.kelas}
+function get(k){try{return JSON.parse(localStorage.getItem(SK+k+":"+idk())||"null")}catch(e){return null}}
+function put(k,v){try{localStorage.setItem(SK+k+":"+idk(),JSON.stringify(v))}catch(e){}}
+function angka(v){var m=String(v).replace(/[−–]/g,"-").replace(/\s/g,"").match(/-?\d+/);return m?parseInt(m[0],10):null}
+function fmt(n){return String(n).replace("-","−")}
+
+function bangun(){
+  $("isi").innerHTML=B.map(function(b,bi){
+    return '<section class="sec bag"><div class="lbl">Bagian '+b.j+'</div><h2 style="font-size:1.15rem">'+b.t+'</h2></section>'+b.s.map(function(s,si){
+      var id=bi+"-"+si;
+      return '<div class="sec q"><div class="lbl">Soal '+b.j+(si+1)+'</div><p>'+s.q+'</p><input type="text" id="i'+id+'" data-i="'+id+'" autocomplete="off" aria-label="Jawaban soal '+b.j+(si+1)+'" placeholder="Jawaban (bilangan bulat)"><div class="fb" id="f'+id+'"></div></div>';
+    }).join("");
+  }).join("");
+  var d=get("d")||{}; document.querySelectorAll("[data-i]").forEach(function(e){ e.value=d[e.dataset.i]||""; e.oninput=function(){put("d",ambil())}; });
+}
+function ambil(){var o={};document.querySelectorAll("[data-i]").forEach(function(e){o[e.dataset.i]=e.value.trim()});return o}
+function hitung(v){
+  var oks={},nb=0,per=B.map(function(){return 0});
+  B.forEach(function(b,bi){ b.s.forEach(function(s,si){ var id=bi+"-"+si, ok=angka(v[id])===s.k; oks[id]=ok; if(ok){nb++;per[bi]++} }); });
+  return {oks:oks,benar:nb,per:per,nilai:Math.round(nb*100/TOTAL),vals:v,waktu:new Date().toLocaleString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"})};
+}
+function tampil(r){
+  B.forEach(function(b,bi){ b.s.forEach(function(s,si){
+    var id=bi+"-"+si, e=$("i"+id), fb=$("f"+id), ok=r.oks[id];
+    e.value=r.vals[id]||""; e.disabled=true; e.className=ok?"ok":"no"; fb.className="fb "+(ok?"ok":"no");
+    fb.innerHTML=ok?'<b>Benar.</b>'+(SHOW_KUNCI?' <span>'+s.p+'</span>':''):'<b>Belum tepat.</b>'+(SHOW_KUNCI?' <span>Jawaban yang benar: <b>'+fmt(s.k)+'</b>. '+s.p+'</span>':'');
+  }); });
+  var rinci=B.map(function(b,i){return "Bagian "+b.j+": "+r.per[i]+" dari "+b.s.length}).join(" &middot; ");
+  $("banner").innerHTML='<div class="banner"><div class="lbl">Hasil LKPD</div><div class="nilai">'+r.nilai+'</div><div>Benar '+r.benar+' dari '+TOTAL+' soal &middot; '+ID.nama+' (kelas '+ID.kelas+')</div><div class="hint">'+rinci+'</div><div class="aks"><button class="btn" id="unduh" type="button">Unduh PDF</button></div><div class="hint">Simpan PDF untuk dipelajari lagi dan tunjukkan ke guru.</div></div>';
+  $("unduh").onclick=function(){unduh(r)};
+  $("aksi").style.display="none"; window.scrollTo({top:0,behavior:"smooth"});
+}
+function bersih(t){return String(t).replace(/[−–]/g,"-").replace(/[^\x20-\x7E\xB0\xD7\xF7]/g,"")}
+function unduh(r){
+  if(!window.jspdf){ window.print(); return; }
+  var doc=new window.jspdf.jsPDF({unit:"mm",format:"a4"}), W=210, M=16, y=18, maxW=W-2*M;
+  function baris(txt,ukuran,tebal,jarak){
+    doc.setFont("helvetica",tebal?"bold":"normal"); doc.setFontSize(ukuran);
+    doc.splitTextToSize(bersih(txt),maxW).forEach(function(l){ if(y>282){doc.addPage();y=18} doc.text(l,M,y); y+=jarak||ukuran*0.5; });
+  }
+  baris("LKPD Aplikasi Bilangan Bulat - Kelas 7",15,true,8);
+  baris("Nama: "+ID.nama+"    Kelas: "+ID.kelas,11,false,6);
+  baris("Waktu: "+r.waktu,11,false,6);
+  baris("Nilai: "+r.nilai+"  (benar "+r.benar+" dari "+TOTAL+")",12,true,9);
+  B.forEach(function(b,bi){
+    y+=2; baris("Bagian "+b.j+": "+b.t+"  ("+r.per[bi]+"/"+b.s.length+")",12,true,7);
+    b.s.forEach(function(s,si){
+      var id=bi+"-"+si, v=(r.vals[id]||"-");
+      baris(b.j+(si+1)+". "+s.q,10,false,5);
+      baris("Jawabanmu: "+v+"   ["+(r.oks[id]?"Benar":"Belum tepat")+"]"+(SHOW_KUNCI?"   Kunci: "+s.k:""),10,true,5);
+      if(SHOW_KUNCI) baris("Pembahasan: "+s.p,10,false,5);
+      y+=3;
+    });
+  });
+  doc.save("LKPD-Bilangan-Bulat_"+ID.nama.replace(/\s+/g,"-")+"_"+ID.kelas+".pdf");
+}
+$("periksa").onclick=function(){
+  var v=ambil(), kosong=Object.keys(v).filter(function(k){return angka(v[k])===null});
+  if(kosong.length){ $("pesan").textContent="Masih ada "+kosong.length+" soal yang belum dijawab dengan bilangan. Lengkapi dulu semuanya."; var e=$("i"+kosong[0]); if(e&&e.scrollIntoView) e.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+  if(!confirm("Periksa sekarang? Setelah diperiksa, jawaban dikunci.")) return;
+  $("pesan").textContent=""; var r=hitung(v); put("r",r); tampil(r); rekap();
+};
+function rekap(){ var r=get("r"); $("rekap").innerHTML="<b>"+ID.nama+"</b> (kelas "+ID.kelas+")"+(r?" &middot; Nilai: <b>"+r.nilai+"</b>":"")+'<button class="link" id="ganti" type="button">Ganti siswa</button>'; $("ganti").onclick=function(){$("app").style.display="none";$("start").style.display="block"}; }
+try{ var sv=JSON.parse(localStorage.getItem(SK+"id")||"null"); if(sv){ $("nama").value=sv.nama||""; $("kelas").value=sv.kelas||""; } }catch(e){}
+$("mulai").onclick=function(){
+  var n=$("nama").value.trim().replace(/\s+/g," "), k=$("kelas").value.trim().replace(",",".");
+  if(!n){ $("err").textContent="Nama wajib diisi."; return; }
+  if(!/^\d\.\d{1,2}$/.test(k)){ $("err").textContent="Tulis kelas seperti 7.1 (angka, titik, angka)."; return; }
+  $("err").textContent=""; ID={nama:n,kelas:k}; try{localStorage.setItem(SK+"id",JSON.stringify(ID))}catch(e){}
+  $("start").style.display="none"; $("app").style.display="block"; $("aksi").style.display="block"; $("banner").innerHTML=""; $("pesan").textContent="";
+  bangun(); var r=get("r"); if(r) tampil(r); rekap(); window.scrollTo({top:0});
+};
+</script>
+</body>
+</html>
