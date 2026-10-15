@@ -42,14 +42,14 @@ table.k{width:100%;border-collapse:collapse;font-size:.92rem;margin-bottom:12px}
   <label class="f" for="nama">Nama lengkap</label>
   <input type="text" id="nama" autocomplete="off">
   <label class="f" for="kelas">Kelas</label>
-  <input type="text" id="kelas" placeholder="Contoh: 8.1" autocomplete="off">
+  <input type="text" id="kelas" placeholder="Contoh: 8A" autocomplete="off">
   <label class="f" for="tgl">Hari, tanggal</label>
   <input type="date" id="tgl">
   <p id="hari" style="margin-top:-6px"></p>
   <label class="f" for="bagian">Bagian</label>
   <select id="bagian">
-    <option value="1">Bagian 1: Pilihan ganda (10 soal, 30 menit)</option>
-    <option value="2">Bagian 2: Isian singkat (10 soal, 60 menit)</option>
+    <option value="1">Bagian 1: Pilihan ganda (10 soal)</option>
+    <option value="2">Bagian 2: Isian singkat (10 soal)</option>
   </select>
   <p><b>Cara mengerjakan</b></p>
   <ol class="t">
@@ -60,8 +60,8 @@ table.k{width:100%;border-collapse:collapse;font-size:.92rem;margin-bottom:12px}
   <ul>
     <li>Pindah tab, pindah aplikasi, atau keluar dari layar penuh dihitung pelanggaran.</li>
     <li>Pelanggaran ke-3: jawaban otomatis dikumpulkan.</li>
-    <li>Menutup atau memuat ulang halaman tidak mengulang waktu.</li>
-    <li>Tiap bagian bisa dikerjakan maksimal 2 kali. Nilai terbaru menggantikan nilai sebelumnya.</li>
+    <li>Tidak ada batas waktu. Lama mengerjakanmu dicatat (tetap berjalan walau halaman ditutup) dan tampil di hasil.</li>
+    <li>Tiap bagian hanya bisa dikerjakan satu kali. Jumlah pelanggaranmu dicatat dan tampil di hasil.</li>
   </ul>
   <p class="err" id="err"></p>
   <button id="mulai">Mulai ujian</button>
@@ -123,7 +123,9 @@ var BAGIAN={
 var MAX=3,B,viol=0,aktif=false,t0=0,tick=null,lastTs=0,ident={},skey="";
 var $=function(i){return document.getElementById(i)};
 function ls(a,k,v){try{if(a==="g")return localStorage.getItem(k);if(a==="s")localStorage.setItem(k,v);if(a==="r")localStorage.removeItem(k)}catch(e){}return null}
-function fmt(n){if(n<0)n=0;var m=Math.floor(n/60),s=n%60;return (m<10?"0":"")+m+":"+(s<10?"0":"")+s}
+function p2(x){return (x<10?"0":"")+x}
+function fmt(n){if(n<0)n=0;var h=Math.floor(n/3600),m=Math.floor(n%3600/60),s=n%60;return (h?h+":":"")+p2(m)+":"+p2(s)}
+function lama(n){if(n<0)n=0;var h=Math.floor(n/3600),m=Math.floor(n%3600/60),s=n%60;return (h?h+" jam ":"")+m+" menit "+s+" detik"}
 
 // tanggal & bagian
 function hariStr(v){if(!v)return"";var d=new Date(v+"T00:00:00");return d.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
@@ -151,18 +153,18 @@ function mulai(){
  $("err").textContent="";
  B=BAGIAN[bg];ident={nama:nama,kelas:kelas,tanggal:hariStr(tgl),bagian:B.judul};
  skey=(nama+"|"+kelas+"|"+bg).toLowerCase();
- if(+(ls("g","att:"+skey)||0)>=2){$("err").textContent="Kesempatan mengerjakan bagian ini sudah habis (2 kali).";return}
+ if(+(ls("g","att:"+skey)||0)>=1){$("err").textContent="Bagian ini sudah dikerjakan atas nama tersebut.";return}
  var saved=ls("g","t0:"+skey);
  t0=saved?+saved:Date.now();if(!saved)ls("s","t0:"+skey,String(t0));
  viol=+(ls("g","v:"+skey)||0);
- if(viol>=MAX||Date.now()-t0>=B.menit*60000){ // lanjutan yang sudah lewat batas
-  $("start").classList.add("hide");$("ujian").classList.remove("hide");render();aktif=true;selesai(viol>=MAX?"Pelanggaran melebihi batas":"Waktu habis");return}
+ if(viol>=MAX){ // lanjutan yang sudah lewat batas
+  $("start").classList.add("hide");$("ujian").classList.remove("hide");render();aktif=true;selesai("Pelanggaran melebihi batas");return}
  $("who").textContent=nama+" ("+kelas+")";$("petunjuk").textContent=B.petunjuk;
  $("viol").textContent="Pelanggaran: "+viol+" / "+MAX;if(viol)$("viol").classList.add("bad");
  $("start").classList.add("hide");$("ujian").classList.remove("hide");
  render();aktif=true;
  try{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(function(){})}catch(e){}
- var upd=function(){var s=B.menit*60-Math.floor((Date.now()-t0)/1000);$("timer").textContent=fmt(s);if(s<=0)selesai("Waktu habis")};
+ var upd=function(){$("timer").textContent="Waktu: "+fmt(Math.floor((Date.now()-t0)/1000))};
  upd();tick=setInterval(upd,1000);
 }
 function catat(alasan){
@@ -190,28 +192,23 @@ function selesai(sebab){
   if(B.jenis==="pg"){var c=document.querySelector('input[name="q'+i+'"]:checked');lastJaw.push(c?"abcd"[+c.value]:"-");if(c&&+c.value===s.a)benar++}
   else{var v=$("i"+i).value.trim();lastJaw.push(v||"-");if(v&&cocok(s,v))benar++}
  });
- var att=(+(ls("g","att:"+skey)||0))+1;ls("s","att:"+skey,String(att));ls("r","t0:"+skey);ls("r","v:"+skey);
- lastInfo={att:att,benar:benar,sebab:sebab,waktu:new Date().toLocaleString("id-ID")};
+ ls("s","att:"+skey,"1");ls("r","t0:"+skey);ls("r","v:"+skey);
+ lastInfo={lama:Math.floor((Date.now()-t0)/1000),benar:benar,sebab:sebab,waktu:new Date().toLocaleString("id-ID")};
  $("ujian").classList.add("hide");$("hasil").classList.remove("hide");
- tampil(att>=2);
+ tampil();
 }
-function tampil(akhir){
- var I=lastInfo;
- var h='<h1>Jawaban terkumpul</h1><p>'+esc(ident.nama)+' ('+esc(ident.kelas)+')<br>'+esc(ident.tanggal)+'<br>'+esc(ident.bagian)+' - '+I.sebab+'<br>Dikumpulkan: '+I.waktu+'</p>'
-  +'<p>Benar: <b>'+I.benar+' dari 10</b><br>Nilai: <b>'+(I.benar*10)+'</b><br>Pelanggaran: <b>'+viol+'</b><br>Percobaan ke-'+I.att+' dari 2</p>';
- if(akhir){
-  h+='<p>Kesempatan mengerjakan bagian ini sudah selesai. Foto layar ini dan tunjukkan ke guru.</p>';
- }else{
-  h+='<p>Masih ada 1 kesempatan lagi. Nilai terbaru menggantikan nilai sebelumnya. Foto layar ini dulu jika perlu.</p><button onclick="ulang()">Coba lagi</button>';
- }
- $("hasil").innerHTML=h;
+function tampil(){
+ var I=lastInfo, lg=viol?'<p><b>Catatan pelanggaran:</b></p><ol>'+$("log").innerHTML+'</ol>':'';
+ $("hasil").innerHTML='<h1>Jawaban terkumpul</h1><p>'+esc(ident.nama)+' ('+esc(ident.kelas)+')<br>'+esc(ident.tanggal)+'<br>'+esc(ident.bagian)+' - '+I.sebab+'<br>Dikumpulkan: '+I.waktu+'</p>'
+  +'<p>Benar: <b>'+I.benar+' dari 10</b><br>Nilai: <b>'+(I.benar*10)+'</b></p>'
+  +'<p>Waktu mengerjakan: <b>'+lama(I.lama)+'</b><br>Jumlah pelanggaran: <b>'+viol+' kali</b></p>'+lg
+  +'<p>Foto layar ini dan tunjukkan ke guru.</p>';
 }
 document.addEventListener("visibilitychange",function(){if(document.hidden)catat("pindah tab / minimize")});
 window.addEventListener("blur",function(){catat("jendela kehilangan fokus")});
 document.addEventListener("fullscreenchange",function(){if(aktif&&!document.fullscreenElement)catat("keluar dari layar penuh")});
 document.addEventListener("contextmenu",function(e){if(aktif)e.preventDefault()});
 ["copy","paste","cut"].forEach(function(ev){document.addEventListener(ev,function(e){if(aktif)e.preventDefault()})});
-function ulang(){$("hasil").classList.add("hide");$("log").innerHTML="<li>Belum ada.</li>";$("viol").classList.remove("bad");viol=0;lastTs=0;mulai()}
 $("mulai").onclick=mulai;
 $("kumpul").onclick=function(){if(confirm("Kumpulkan jawaban sekarang? Setelah ini tidak bisa diubah."))selesai("Dikumpulkan siswa")};
 $("lanjut").onclick=function(){$("overlay").style.display="none";if(!document.fullscreenElement){try{document.documentElement.requestFullscreen().catch(function(){})}catch(e){}}};
